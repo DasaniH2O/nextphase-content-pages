@@ -1,0 +1,61 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NextPhase — Today's Concepts</title>
+<style>
+ :root{--cream:#F0EDE4;--card:#fff;--ink:#191817;--soft:#6B6660;--coral:#D97757;--line:#E4DFD3}
+ *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+ body{background:var(--cream);color:var(--ink);font:16px/1.45 -apple-system,Inter,sans-serif;padding:16px 14px 90px}
+ h1{font-size:20px;font-weight:800}.sub{color:var(--soft);font-size:14px;margin-bottom:14px}
+ .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+ .score{display:inline-block;background:var(--coral);color:#fff;font-weight:800;font-size:12px;padding:3px 9px;border-radius:999px}
+ .t{font-size:18px;font-weight:800;margin:8px 0 6px}
+ .angle{font-size:14px;color:var(--soft);margin-bottom:4px}.angle b{color:var(--ink)}
+ .row{display:flex;gap:8px;margin-top:12px}
+ button{flex:1;border:0;border-radius:12px;padding:13px 8px;font-weight:700;font-size:15px}
+ .pick{background:var(--coral);color:#fff}.res{background:#EDE7DA;color:var(--ink)}.rej{background:#fff;border:1px solid var(--line);color:var(--soft)}
+ .why{display:none;margin-top:10px}.why.on{display:block}
+ .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+ .chip{background:#F5F1E8;border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:13px}
+ .chip.sel{background:var(--ink);color:#fff}
+ input{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:15px}
+ .send{margin-top:8px;background:var(--ink);color:#fff}
+ .done{text-align:center;padding:50px 0;color:var(--soft)}
+ .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;font-size:14px;color:var(--soft)}
+</style></head><body>
+<h1 id="hi">…</h1><div class="sub" id="sub"></div><div id="list"></div>
+<div class="bar" id="bar"></div>
+<script>
+const T=new URLSearchParams(location.search).get('t');
+const PICK_FN_URL='https://dzevdgempxtkihliqugb.supabase.co/functions/v1/pick';
+const REASONS=["not my lane","too basic","can't verify","already covered","boring","no clear angle"];
+let owner='',left=0;
+const api=(op,body={})=>fetch(`${PICK_FN_URL}?t=${T}&op=${op}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
+function bar(){document.getElementById('bar').textContent=left?`${left} left · reasons train your filter`:'all done ✓';}
+function card(c){
+ const el=document.createElement('div');el.className='card';
+ el.innerHTML=`<span class="score">${c.score}</span><div class="t">${c.title}</div>
+ <div class="angle"><b>Angle:</b> ${c.angle||'—'}</div><div class="angle">${c.why_interesting||''}</div>
+ <div class="row"><button class="pick">Today</button><button class="res">Reserve</button><button class="rej">Skip</button></div>
+ <div class="why"><div class="chips">${REASONS.map(r=>`<span class="chip">${r}</span>`).join('')}</div>
+ <input placeholder="or type why (required)"><button class="send">Send skip</button></div>`;
+ const why=el.querySelector('.why'),inp=el.querySelector('input');
+ const go=(v,reason='')=>api('decide',{concept_id:c.id,verdict:v,reason,could_be_angle:false})
+   .then(r=>{if(r.ok){left=r.remaining;bar();el.remove();if(!left)document.getElementById('list').innerHTML='<div class="done">All done ✓<br>See you tomorrow.</div>';}
+             else alert(r.error||'error')});
+ el.querySelector('.pick').onclick=()=>go('picked');
+ el.querySelector('.res').onclick=()=>go('reserve');
+ el.querySelector('.rej').onclick=()=>why.classList.add('on');
+ el.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>go('rejected',ch.textContent));
+ el.querySelector('.send').onclick=()=>inp.value.trim()?go('rejected',inp.value.trim()):inp.focus();
+ return el;
+}
+api('list').then(d=>{
+ if(d.error){document.body.innerHTML='<div class="done">Bad or expired link.</div>';return;}
+ owner=d.label||d.owner;left=d.remaining;
+ document.getElementById('hi').textContent=`Morning, ${owner}`;
+ document.getElementById('sub').textContent=`${d.remaining} concepts from last night's outliers`;
+ const L=document.getElementById('list');
+ if(!d.concepts.length){L.innerHTML='<div class="done">Nothing new. ✓</div>';}
+ d.concepts.forEach(c=>L.appendChild(card(c)));bar();
+});
+</script></body></html>
