@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prompt caching: pay 10% for the part that never changes</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FBF8F2;--card:#fff;--panel:#F0EBE1;--ink:#1B160F;--muted:#6E655A;--faint:#A79C8C;--line:#E2DACC;--accent:#F14A00;--chip:#C9C0B2}
+*{box-sizing:border-box;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:14px;line-height:1.5;padding:40px 30px 60px}
+.sheet{max-width:900px;margin:0 auto}
+.mast{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--ink);padding-bottom:8px}
+.mast .d{color:var(--accent);font-weight:600}
+.kick{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:26px}
+h1{font-family:Archivo;font-weight:900;font-size:40px;line-height:1.02;letter-spacing:-.02em;margin:8px 0 10px}
+h1 em{font-style:italic;color:var(--accent)}
+.sub{font-size:15px;color:var(--muted);max-width:66ch;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:1.9fr 1fr;gap:26px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}body{padding:24px 16px}h1{font-size:30px}}
+h2{font-family:Archivo;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);margin:26px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.step{display:flex;gap:14px;margin-bottom:14px}
+.step .n{font-family:Archivo;font-weight:900;font-size:30px;line-height:1;color:var(--accent);min-width:34px}
+.step b{font-family:Archivo}
+pre{background:var(--ink);color:#F3EEE4;font-size:12.5px;line-height:1.5;padding:16px 18px;border-radius:8px;overflow-x:auto;margin:10px 0}
+pre .c{color:#9B9race;color:#8f877a}
+pre .k{color:#F1A56A}.pre .s{color:#C7D89B}
+.schem{border:2px solid var(--ink);border-radius:8px;overflow:hidden;margin:8px 0}
+.schem .row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;font-size:12.5px;border-bottom:1px solid var(--line)}
+.schem .row.cached{background:#FBE7DC}
+.schem .tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.brk{background:var(--accent);color:#fff;font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:5px;font-weight:600}
+.note{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;color:#5a5045;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0}
+th{background:var(--ink);color:var(--paper);text-align:left;padding:7px 9px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+td{padding:7px 9px;border-bottom:1px solid var(--line)}
+td.n{font-variant-numeric:tabular-nums;text-align:right}
+tr.hit td{color:var(--accent);font-weight:600}
+.rail .box{border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:16px;background:var(--card)}
+.rail h3{font-family:Archivo;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.inval{list-style:none;font-size:12.5px}
+.inval li{padding:4px 0 4px 16px;position:relative;color:#5a5045}
+.inval li:before{content:"\00D7";position:absolute;left:0;color:var(--accent);font-weight:700}
+.foot{margin-top:30px;border-top:1px solid var(--line);padding-top:12px;font-size:11px;color:var(--faint);line-height:1.6}
+.foot a{color:var(--muted)}
+</style></head><body><div class="sheet">
+
+<div class="mast"><span>COMMENT <b style="color:var(--ink)">&ldquo;CACHE&rdquo;</b> <span class="d">&middot; DELIVERED</span></span><span>NextPhase</span></div>
+
+<div class="kick">Prompt caching &middot; API cost</div>
+<h1>Cache the front of your prompt &mdash; pay <em>one-tenth</em> for the part that never changes</h1>
+<p class="sub">Your tools and system instructions are byte-identical on every call. Mark them once and the provider reads back the computed version at a steep discount. Here is exactly where the breakpoint goes, for Anthropic and OpenAI.</p>
+
+<div class="grid">
+<div class="main">
+
+<h2>The one move</h2>
+<div class="step"><div class="n">1</div><div><b>Put the static stuff first.</b> Order the request <b>tools &rarr; system &rarr; long context &rarr; the turn-by-turn messages.</b> Anything that changes every call (the user&rsquo;s latest message, a timestamp) goes last.</div></div>
+<div class="step"><div class="n">2</div><div><b>Set the breakpoint on the last static block.</b> On Anthropic that&rsquo;s an explicit marker; everything <em>before</em> it gets cached. On OpenAI it&rsquo;s automatic for any prompt over ~1,024 tokens.</div></div>
+<div class="step"><div class="n">3</div><div><b>Keep that prefix byte-for-byte identical.</b> This is the whole game. One changed character before the breakpoint and you pay full price again (see the catch).</div></div>
+
+<h2>The exact setup</h2>
+<b style="font-family:Archivo;font-size:13px">Anthropic &mdash; Messages API</b>
+<pre><span class="c"># mark the END of the static prefix. tools + system + everything</span>
+<span class="c"># above this point is cached and read back at 0.1x next time.</span>
+{
+  "model": "claude-opus-4-8",
+  "system": [
+    { "type": "text", "text": "&lt;your long, fixed system prompt&gt;",
+      "cache_control": { "type": "ephemeral" } }   <span class="c">&larr; breakpoint</span>
+  ],
+  "messages": [ { "role": "user", "content": "&lt;the part that changes&gt;" } ]
+}</pre>
+<b style="font-family:Archivo;font-size:13px">OpenAI &mdash; automatic</b>
+<pre><span class="c"># nothing to set. just keep the static content at the FRONT</span>
+<span class="c"># and identical. caching kicks in above ~1,024 tokens,</span>
+<span class="c"># in 128-token increments, at 50% off the cached portion.</span></pre>
+
+<h2>Where the discount actually lands</h2>
+<div class="schem">
+<div class="row cached"><span>tools &nbsp;<span class="tag">static</span></span><span class="tag">cached &middot; 0.1x</span></div>
+<div class="row cached"><span>system prompt &nbsp;<span class="tag">static</span></span><span class="tag">cached &middot; 0.1x</span></div>
+<div class="row cached"><span>long context / examples &nbsp;<span class="tag">static</span></span><span class="tag">cached &middot; 0.1x</span></div>
+<div class="brk">&darr; cache breakpoint &darr;</div>
+<div class="row"><span>latest user message &nbsp;<span style="color:var(--faint)">changes</span></span><span style="color:var(--muted)">full price</span></div>
+</div>
+<div class="note"><b>Break-even:</b> a cache <em>write</em> costs more than a normal call first &mdash; 1.25x for the 5-minute cache, 2x for the 1-hour. So you need at least <b>one hit</b> (5-min) or <b>two hits</b> (1-hour) on that prefix before it&rsquo;s cheaper than not caching. Agents that loop on the same system prompt clear this instantly; a one-off call never does.</div>
+
+</div>
+<div class="rail">
+
+<div class="box"><h3>Anthropic price &middot; Opus 4.8</h3>
+<table>
+<tr><th>Per MTok</th><th style="text-align:right">$</th></tr>
+<tr><td>Base input</td><td class="n">5.00</td></tr>
+<tr><td>Write &middot; 5&nbsp;min (1.25x)</td><td class="n">6.25</td></tr>
+<tr><td>Write &middot; 1&nbsp;hr (2x)</td><td class="n">10.00</td></tr>
+<tr class="hit"><td>Cache hit (0.1x)</td><td class="n">0.50</td></tr>
+</table>
+<div style="font-size:11px;color:var(--faint);margin-top:6px">as of Jul&nbsp;20&nbsp;2026</div></div>
+
+<div class="box"><h3>OpenAI</h3>
+<div style="font-size:12.5px;color:#5a5045">Automatic. <b>50% off</b> the cached prefix, prompts <b>&gt;1,024 tokens</b>, in 128-token steps. Cache clears after 5&ndash;10 min idle.</div></div>
+
+<div class="box"><h3>The catch &mdash; what breaks it</h3>
+<div style="font-size:12.5px;color:#5a5045;margin-bottom:6px">Any of these before the breakpoint invalidates the whole cache:</div>
+<ul class="inval">
+<li>a timestamp or per-request variable up front</li>
+<li>changed tool definitions</li>
+<li>toggling web search or citations</li>
+<li>adding or removing an image</li>
+<li>the 5-min TTL lapsing on bursty traffic</li>
+</ul></div>
+
+<div class="box" style="background:var(--panel)"><h3>Straight talk</h3>
+<div style="font-size:12.5px;color:#5a5045">The &ldquo;70% cheaper&rdquo; you saw is workload-dependent, not a flat rate. The real read discounts are <b>90% (Anthropic)</b> and <b>50% (OpenAI)</b> &mdash; on the reused portion only, after you clear the write premium.</div></div>
+
+</div>
+</div>
+
+<div class="foot">
+<b>Sources:</b> <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">platform.claude.com/docs &middot; prompt-caching</a> &middot; <a href="https://openai.com/index/api-prompt-caching/">openai.com &middot; api-prompt-caching</a> &middot; figures as of 20 Jul 2026 &middot; free to share.
+</div>
+</div></body></html>
