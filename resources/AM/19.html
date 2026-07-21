@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run a full SEO audit from your terminal for free — one command, a squad of sub-agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF9F4; --card:#FFFFFF; --panel:#EEF0EA; --ink:#12160F;
+    --muted:#5f6657; --hair:#DEE1D6; --accent:#2E7D32;
+    --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+  a{color:var(--ink);text-decoration:none;font-weight:800;border-bottom:3px solid var(--accent)}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 44px 72px}
+  .mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);
+    padding-bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .mast .kw{color:var(--accent);font-weight:600}
+  .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:34px 0 10px}
+  h1{font-weight:900;font-size:44px;line-height:1.04;letter-spacing:-.02em;margin:0 0 18px;max-width:19ch}
+  h1 .hl{color:var(--accent)}
+  .lead{font-size:19px;line-height:1.5;max-width:60ch;margin:0 0 6px;font-weight:500}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:38px;margin-top:34px}
+  h2{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+    border-top:1.5px solid var(--hair);padding-top:12px;margin:38px 0 14px}
+  p{line-height:1.55;font-size:16px;font-weight:500}
+  code{font-family:var(--mono);font-size:13px;background:var(--panel);padding:2px 6px;border:1px solid var(--hair)}
+  pre{font-family:var(--mono);font-size:12.5px;background:var(--ink);color:var(--paper);padding:16px;overflow:auto;line-height:1.55;margin:12px 0}
+  pre .c{color:#8fce90}
+  .art{background:var(--card);border:1px solid var(--hair);box-shadow:8px 8px 0 var(--ink);padding:22px;margin:8px 0}
+  .step{display:grid;grid-template-columns:60px 1fr;gap:16px;padding:15px 0;border-bottom:1px solid var(--hair)}
+  .step .n{font-weight:900;font-size:44px;line-height:.9;color:var(--accent)}
+  .step h3{margin:2px 0 6px;font-size:18px;font-weight:800}
+  .step p{margin:0;font-size:15px;color:#252a1f}
+  table{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:14px}
+  th{background:var(--ink);color:var(--paper);text-align:left;padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  td{padding:9px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+  td.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rail .box{background:var(--panel);border:1px solid var(--hair);padding:16px 18px;margin-bottom:18px}
+  .rail h4{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+  .rail ul{margin:0;padding-left:16px;font-size:13.5px;line-height:1.5;font-weight:500}
+  .rail li{margin-bottom:7px}
+  .caveat{background:var(--card);border:1px solid var(--ink);border-left:6px solid var(--accent);padding:16px 18px}
+  .caveat h4{color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px}
+  .caveat p{font-size:14px;margin:0}
+  .foot{border-top:2px solid var(--ink);margin-top:44px;padding-top:14px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted);letter-spacing:.04em}
+  .foot b{color:var(--ink)}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:32px}.wrap{padding:26px 20px 50px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <span>COMMENT <span class="kw">&ldquo;AUDIT&rdquo;</span> &middot; DELIVERED</span>
+    <span>NEXTPHASE &middot; @AMINE</span>
+  </div>
+
+  <div class="kicker">Setup Guide &middot; claude-seo (open source)</div>
+  <h1>Run a full SEO audit from your terminal &mdash; <span class="hl">one command, a squad of sub-agents, $0.</span></h1>
+  <p class="lead"><code>claude-seo</code> is a free, MIT-licensed skill you install into Claude Code. One command fans out specialist sub-agents in parallel across a site &mdash; technical, content, schema, competitors &mdash; plus GEO/AEO checks (whether ChatGPT and Perplexity recommend the business). It returns a 0&ndash;100 health score and a prioritized fix list. Everything below runs on your own machine.</p>
+
+  <div class="grid">
+    <div class="main">
+
+      <h2>Install &amp; run</h2>
+      <div class="art">
+        <pre><span class="c"># 1 — prerequisites: Python 3.10+ and the Claude Code CLI</span>
+python3 --version      <span class="c"># need 3.10 or newer</span>
+npm i -g @anthropic-ai/claude-code
+
+<span class="c"># 2 — clone the skill</span>
+git clone https://github.com/AgriciDaniel/claude-seo.git
+
+<span class="c"># 3 — inside Claude Code, run the audit against your site</span>
+claude
+&gt; /seo-audit https://yoursite.com</pre>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-top:0">Repo: <a href="https://github.com/AgriciDaniel/claude-seo">github.com/AgriciDaniel/claude-seo</a> &mdash; ~11.9K stars, ~1.7K forks, MIT license (as of 2026-07-21). Confirm the exact install/command in the repo README before running; forks and copycats exist.</p>
+
+      <h2>What the one command fans out to</h2>
+      <div class="art">
+        <svg viewBox="0 0 620 200" width="100%" role="img" aria-label="Sub-agent fan-out schematic" font-family="'IBM Plex Mono',monospace">
+          <defs><marker id="g" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#2E7D32"/></marker></defs>
+          <rect x="6" y="78" width="150" height="44" fill="#12160F"/>
+          <text x="81" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#FBF9F4">/seo-audit &lt;url&gt;</text>
+          <text x="81" y="113" text-anchor="middle" font-size="10" fill="#8fce90">one command</text>
+          <g font-size="11" fill="#12160F">
+            <rect x="330" y="4" width="200" height="30" fill="#FFFFFF" stroke="#DEE1D6"/><text x="342" y="23">technical SEO</text>
+            <rect x="330" y="40" width="200" height="30" fill="#FFFFFF" stroke="#DEE1D6"/><text x="342" y="59">content quality</text>
+            <rect x="330" y="76" width="200" height="30" fill="#FFFFFF" stroke="#DEE1D6"/><text x="342" y="95">schema / structured data</text>
+            <rect x="330" y="112" width="200" height="30" fill="#FFFFFF" stroke="#DEE1D6"/><text x="342" y="131">competitor sizing</text>
+            <rect x="330" y="148" width="200" height="30" fill="#EEF0EA" stroke="#2E7D32"/><text x="342" y="167">GEO / AEO: ChatGPT &amp; Perplexity</text>
+          </g>
+          <rect x="196" y="84" width="96" height="32" fill="#EEF0EA" stroke="#12160F"/>
+          <text x="244" y="104" text-anchor="middle" font-size="11" font-weight="600" fill="#12160F">sub-agents</text>
+          <line x1="156" y1="100" x2="192" y2="100" stroke="#2E7D32" stroke-width="2" marker-end="url(#g)"/>
+          <line x1="292" y1="96" x2="326" y2="19" stroke="#2E7D32" stroke-width="2" marker-end="url(#g)"/>
+          <line x1="292" y1="98" x2="326" y2="55" stroke="#2E7D32" stroke-width="2" marker-end="url(#g)"/>
+          <line x1="292" y1="100" x2="326" y2="91" stroke="#2E7D32" stroke-width="2" marker-end="url(#g)"/>
+          <line x1="292" y1="102" x2="326" y2="127" stroke="#2E7D32" stroke-width="2" marker-end="url(#g)"/>
+          <line x1="292" y1="104" x2="326" y2="163" stroke="#2E7D32" stroke-width="2" marker-end="url(#g)"/>
+        </svg>
+      </div>
+
+      <h2>What you get back &mdash; and how solid it is</h2>
+      <table>
+        <thead><tr><th>Output</th><th>What it is</th><th>Trust level</th></tr></thead>
+        <tbody>
+          <tr><td>Health score</td><td class="mono">0&ndash;100</td><td>Model judgment, not Google data</td></tr>
+          <tr><td>Fix list</td><td>prioritized actions</td><td>High &mdash; concrete &amp; checkable</td></tr>
+          <tr><td>GEO/AEO</td><td>LLM recommend test</td><td>Snapshot in time</td></tr>
+          <tr><td>Rankings/volume</td><td class="mono">opt-in add-on</td><td>Needs DataForSEO/Firecrawl</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="rail">
+      <div class="box">
+        <h4>Before you run</h4>
+        <ul>
+          <li><b>Python 3.10+</b> installed</li>
+          <li><b>Claude Code</b> CLI + a Claude plan (each audit consumes usage)</li>
+          <li>No signup, no credit card, no SaaS &mdash; runs locally</li>
+          <li>MIT license: free to use and modify</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>Want real ranking data?</h4>
+        <ul>
+          <li>Bolt on the opt-in extensions (e.g. <b>DataForSEO</b>, <b>Firecrawl</b>) for live rankings &amp; search volume &mdash; those may carry their own cost</li>
+        </ul>
+      </div>
+      <div class="caveat">
+        <h4>The honest catch</h4>
+        <p>The 0&ndash;100 health score is the model&rsquo;s best judgment &mdash; not authoritative Google ranking data. Use it to prioritize fixes, not to report position. The &ldquo;$5,000 agency audit in 4 minutes&rdquo; framing is rhetoric, not a measured benchmark. And confirm the repo before trusting it: several similarly-named SEO skills exist.</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <b>NEXTPHASE</b> &mdash; own tools beat rented dashboards.<br>
+    Sources: github.com/AgriciDaniel/claude-seo (features, license, ~11.9K stars) &middot; claude-seo.md landing page &middot; verified 2026-07-21 &middot; free to share.
+  </div>
+</div>
+</body>
+</html>
