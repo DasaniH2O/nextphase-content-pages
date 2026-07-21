@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your Fable 5 is being rerouted to Opus 4.8</title><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>:root{--paper:#FBF8F2;--card:#fff;--panel:#F0EBE1;--ink:#1B160F;--muted:#6E655A;--faint:#A79C8C;--line:#E2DACC;--accent:#F14A00}
+*{box-sizing:border-box;margin:0}body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:14px;line-height:1.5;padding:40px 30px 60px}
+.sheet{max-width:900px;margin:0 auto}.mast{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--ink);padding-bottom:8px}.mast .d{color:var(--accent);font-weight:600}
+.kick{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:26px}
+h1{font-family:Archivo;font-weight:900;font-size:38px;line-height:1.03;letter-spacing:-.02em;margin:8px 0 10px}h1 em{font-style:italic;color:var(--accent)}
+.sub{font-size:15px;color:var(--muted);max-width:66ch;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:1.9fr 1fr;gap:26px}@media(max-width:720px){.grid{grid-template-columns:1fr}body{padding:24px 16px}h1{font-size:29px}}
+h2{font-family:Archivo;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.step{display:flex;gap:14px;margin-bottom:13px}.step .n{font-family:Archivo;font-weight:900;font-size:28px;line-height:1;color:var(--accent);min-width:32px}.step b{font-family:Archivo}
+pre{background:var(--ink);color:#F3EEE4;font-size:12.5px;line-height:1.5;padding:15px 17px;border-radius:8px;overflow-x:auto;margin:9px 0}pre .c{color:#9b9287}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0}th{background:var(--ink);color:var(--paper);text-align:left;padding:7px 9px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}td{padding:7px 9px;border-bottom:1px solid var(--line)}td.n{font-variant-numeric:tabular-nums;text-align:right}tr.bad td{color:var(--accent);font-weight:600}
+.note{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;color:#5a5045;margin:13px 0}
+.chk{list-style:none;font-size:13px}.chk li{padding:5px 0 5px 20px;position:relative;color:#4d463e}.chk li:before{content:"›";position:absolute;left:2px;color:var(--accent);font-weight:700}
+.rail .box{border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:16px;background:var(--card)}.rail h3{font-family:Archivo;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.big{font-family:Archivo;font-weight:900;font-size:26px;color:var(--accent);line-height:1}
+.foot{margin-top:28px;border-top:1px solid var(--line);padding-top:12px;font-size:11px;color:var(--faint);line-height:1.6}.foot a{color:var(--muted)}
+.hd{font-family:"Archivo";font-weight:800;font-size:13px;margin-top:4px}</style></head><body><div class="sheet">
+<div class="mast"><span>COMMENT <b style="color:var(--ink)">&ldquo;ROUTER&rdquo;</b> <span class="d">&middot; DELIVERED</span></span><span>NextPhase</span></div>
+<div class="kick">Claude Fable 5 &middot; silent routing</div>
+<h1>Your Fable 5 isn&rsquo;t dumber &mdash; a safety router is quietly serving you <em>Opus 4.8</em></h1>
+<p class="sub">Since the July 1 reinstatement, a classifier sits in front of Fable 5. On anything security- or debugging-flavored it silently reroutes you to the weaker model. You pay for Fable, you get the fallback. Here&rsquo;s how to tell, and what to do.</p>
+<div class="grid"><div class="main">
+<h2>What&rsquo;s actually happening</h2>
+<p>A new safety <b>classifier</b> was bolted on as a condition of Fable&rsquo;s return. It watches every prompt; when it reads something as security-adjacent or coding/debugging, it <b>reroutes the request to Opus 4.8</b> instead of Fable 5 &mdash; without telling you. So a &ldquo;worse&rdquo; Fable is usually a <em>misrouted</em> one.</p>
+<h2>The receipts (BridgeBench, after Jul 1)</h2>
+<table><tr><th>Task</th><th class="n">Before</th><th class="n">After</th></tr>
+<tr class="bad"><td>Debugging</td><td class="n">86.2</td><td class="n">25.9</td></tr>
+<tr><td>Refactoring</td><td class="n">73.6</td><td class="n">38.4</td></tr>
+<tr><td>Hallucination resistance</td><td class="n">75.9</td><td class="n">61.7</td></tr></table>
+<div class="note"><b>The tell:</b> on the debugging set, only <b>3 of 12</b> tasks actually reached Fable 5 &mdash; the other 9 were rerouted to Opus 4.8 and scored zero. That collapse is routing, not capability.</div>
+<h2>Are you affected?</h2>
+<ul class="chk">
+<li>Your prompt contains <b>vulnerability, exploit, hook, memory management</b>, or similar terms</li>
+<li>You&rsquo;re debugging or refactoring real code</li>
+<li>Blind human-preference (non-code) barely moved &mdash; document +34, expert text +25 &mdash; so casual writing users won&rsquo;t notice</li>
+</ul>
+<h2>What to do right now</h2>
+<div class="step"><div class="n">1</div><div><b>Verify which model answered.</b> Ask the model to state its name/version at the end of a suspect response.</div></div>
+<div class="step"><div class="n">2</div><div><b>De-trigger the prompt.</b> Rephrase security/debugging asks in neutral terms; split the sensitive word out of the first message.</div></div>
+<div class="step"><div class="n">3</div><div><b>Benchmark your own tasks</b> before vs after on a fixed set &mdash; don&rsquo;t trust vibes, the effect is task-specific.</div></div>
+</div><div class="rail">
+<div class="box"><h3>Why it exists</h3><div style="font-size:12.5px;color:#5a5045">Amazon researchers found a jailbreak getting Fable to demonstrate software vulnerabilities &rarr; a U.S. export-control ban &rarr; Fable was reinstated <b>on condition</b> of this classifier. It casts too wide a net.</div></div>
+<div class="box" style="background:var(--panel)"><h3>Straight talk</h3><div style="font-size:12.5px;color:#5a5045">Anthropic <b>acknowledged the false positives</b> but gave <b>no timeline</b> to tune it down. So plan around it, don&rsquo;t wait for a fix.</div></div>
+</div></div>
+<div class="foot"><b>Sources:</b> <a href="https://decrypt.co/372750/claude-fable-5-not-nerfed-router-paranoid">decrypt.co &middot; router analysis</a> &middot; <a href="https://www.bleepingcomputer.com/news/artificial-intelligence/claude-fable-relaunch-disappoints-users-with-nerfed-performance/">bleepingcomputer &middot; relaunch</a> &middot; as of 20 Jul 2026 &middot; free to share.</div>
+</div></body></html>
