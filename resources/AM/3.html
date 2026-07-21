@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt-Caching Break-Even Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+    --muted:#6E655A; --hairline:#E2DACC; --accent:#F14A00;
+    --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--display);font-weight:600;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 44px 72px}
+  .kicker{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .masthead{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:8px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .masthead .r{color:var(--muted)}
+  .masthead b{color:var(--accent);font-weight:600}
+  h1{font-family:var(--display);font-weight:900;letter-spacing:-.02em;line-height:1.04;
+    font-size:46px;margin:26px 0 18px;max-width:20ch}
+  .dek{font-size:19px;font-weight:600;color:var(--ink);max-width:60ch;margin:0 0 8px}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:40px;margin-top:30px;align-items:start}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}.wrap{padding:28px 22px}h1{font-size:34px}}
+  h2{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em;
+    margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+  p{margin:0 0 14px;max-width:62ch}
+  a{color:var(--ink);font-weight:800;text-decoration:none;
+    box-shadow:inset 0 -6px 0 rgba(241,74,0,.28);transition:box-shadow .15s}
+  a:hover{box-shadow:inset 0 -12px 0 rgba(241,74,0,.32)}
+  table{width:100%;border-collapse:collapse;margin:8px 0 6px;font-size:13.5px}
+  thead th{background:var(--ink);color:var(--paper);text-align:left;
+    font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;padding:9px 11px}
+  tbody td{border-bottom:1px solid var(--hairline);padding:9px 11px;vertical-align:top}
+  tbody tr:last-child td{border-bottom:1px solid var(--ink)}
+  .num{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--muted);margin:4px 0 0}
+  .rail{font-size:13.5px}
+  .panel{background:var(--panel);border:1px solid var(--hairline);padding:18px 18px 14px;margin-bottom:20px}
+  .panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 12px;font-weight:600}
+  .stat{display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+    border-bottom:1px dotted var(--hairline);font-size:13px}
+  .stat:last-child{border-bottom:0}
+  .stat .v{font-family:var(--mono);font-weight:600;text-align:right;white-space:nowrap}
+  .center{background:var(--card);border:1px solid var(--ink);
+    box-shadow:9px 9px 0 var(--panel);padding:22px 24px;margin:14px 0 6px}
+  .center .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 4px}
+  .center h3{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 16px}
+  .beq{font-family:var(--mono);font-size:14px;background:var(--paper);
+    border-left:3px solid var(--accent);padding:12px 14px;margin:6px 0 2px;line-height:1.7}
+  .step{display:flex;gap:16px;margin:0 0 6px;align-items:baseline}
+  .step .n{font-family:var(--display);font-weight:900;font-size:38px;color:var(--accent);
+    line-height:.9;min-width:46px}
+  .step .t{padding-top:4px}
+  .limit{border:1px dashed var(--accent);background:#FFF6F1;padding:16px 18px;margin:22px 0}
+  .limit .kicker{color:var(--accent)}
+  footer{margin-top:40px;border-top:2px solid var(--ink);padding-top:12px;
+    font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.7}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;background:var(--ink);color:var(--paper);padding:2px 7px;margin-left:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div>COMMENT <b>&ldquo;PREFIX&rdquo;</b> &middot; DELIVERED</div>
+    <div class="r">NextPhase &middot; @nextphase</div>
+  </div>
+  <p class="kicker" style="margin-top:22px">Field Guide &middot; LLM Cost &middot; as of 20 Jul 2026</p>
+  <h1>One cache hit repays a 5-minute write. Two repay the hour.</h1>
+  <p class="dek">Prompt caching stores the static front of your prompt so later calls read it back at a tenth of the price. You pay a premium on the first write &mdash; so the only question that matters is how many reuses it takes to get your money back. Here are the exact break-even points, the per-model token floor that silently switches caching off, and the dollar math on Opus&nbsp;4.8.</p>
+
+  <div class="grid">
+    <main>
+      <div class="center">
+        <p class="lbl">The centerpiece &middot; break-even by cache type</p>
+        <h3>How many cache reads before the write pays for itself</h3>
+        <table>
+          <thead><tr><th>Cache</th><th>Write cost</th><th>Read (hit)</th><th>Premium you front</th><th>Saved per hit</th><th>Break-even</th></tr></thead>
+          <tbody>
+            <tr><td>5-minute (default)</td><td class="num">1.25&times;</td><td class="num">0.10&times;</td><td class="num">+0.25&times;</td><td class="num">0.90&times;</td><td class="num"><b>1 hit</b></td></tr>
+            <tr><td>1-hour (opt-in)</td><td class="num">2.00&times;</td><td class="num">0.10&times;</td><td class="num">+1.00&times;</td><td class="num">0.90&times;</td><td class="num"><b>2 hits</b></td></tr>
+          </tbody>
+        </table>
+        <p class="cap">All multiples are of base input price. &ldquo;Saved per hit&rdquo; = 1.0&times; (what a full reprocess would cost) &minus; 0.10&times; (the hit). Anthropic Claude API, as of 20&nbsp;Jul&nbsp;2026.</p>
+        <div class="beq">break-even hits&nbsp;=&nbsp;ceil( write_premium &divide; 0.90 )<br>5m: ceil(0.25 &divide; 0.90)&nbsp;=&nbsp;<b>1</b>&nbsp;&nbsp;&middot;&nbsp;&nbsp;1h: ceil(1.00 &divide; 0.90)&nbsp;=&nbsp;<b>2</b></div>
+      </div>
+
+      <h2>Read it in dollars &mdash; Opus 4.8, per million tokens</h2>
+      <table>
+        <thead><tr><th>Line item</th><th>Price / MTok</th><th>vs base input</th></tr></thead>
+        <tbody>
+          <tr><td>Base input (no cache)</td><td class="num">$5.00</td><td class="num">1.00&times;</td></tr>
+          <tr><td>5-minute cache write</td><td class="num">$6.25</td><td class="num">1.25&times;</td></tr>
+          <tr><td>1-hour cache write</td><td class="num">$10.00</td><td class="num">2.00&times;</td></tr>
+          <tr><td>Cache hit (read)</td><td class="num">$0.50</td><td class="num">0.10&times;</td></tr>
+        </tbody>
+      </table>
+      <p class="cap">Anthropic pricing example, Opus&nbsp;4.8, as of 20&nbsp;Jul&nbsp;2026. A cached 20k-token system prompt reused 50&times; costs ~$0.50 once + 50&times;$0.01 instead of 50&times;$0.10 &mdash; roughly $1 vs $5 on that prefix alone.</p>
+
+      <h2>The floor that silently turns caching off</h2>
+      <p>Below a minimum shared-prefix length, nothing caches &mdash; and there is no error. You just quietly pay full price. The floor depends on the model:</p>
+      <table>
+        <thead><tr><th>Minimum cacheable prefix</th><th>Models</th></tr></thead>
+        <tbody>
+          <tr><td class="num">512 tokens</td><td>Fable&nbsp;5, Mythos&nbsp;5</td></tr>
+          <tr><td class="num">1,024 tokens</td><td>Opus&nbsp;4.8, Sonnet&nbsp;5, Sonnet&nbsp;4.6 / 4.5</td></tr>
+          <tr><td class="num">2,048 tokens</td><td>Opus&nbsp;4.7</td></tr>
+          <tr><td class="num">4,096 tokens</td><td>Opus&nbsp;4.6 / 4.5, Haiku&nbsp;4.5</td></tr>
+        </tbody>
+      </table>
+      <p class="cap">Anthropic prompt-caching docs, as of 20&nbsp;Jul&nbsp;2026.</p>
+
+      <h2>Get a hit every time &mdash; three rules</h2>
+      <div class="step"><div class="n">1</div><div class="t"><b>Put the static content first.</b> Order is tools &rarr; system &rarr; messages. The cache breakpoint has to sit after the last byte-identical block, so anything variable must come <i>after</i> it.</div></div>
+      <div class="step"><div class="n">2</div><div class="t"><b>Keep the prefix byte-identical.</b> A timestamp, an edited tool schema, a toggled image or citation setting anywhere before the breakpoint invalidates everything downstream and forces a fresh full-price write.</div></div>
+      <div class="step"><div class="n">3</div><div class="t"><b>Clear the floor.</b> Confirm your shared prefix beats the token minimum for your model (above). Verify with <span class="num">usage.cache_read_input_tokens</span> in the response &mdash; if it&rsquo;s 0, you&rsquo;re paying full price.</div></div>
+
+      <div class="limit">
+        <p class="kicker">One honest limitation</p>
+        <p style="margin:0">The 5-minute default TTL refreshes free on every hit &mdash; but if your traffic is slow or bursty and a gap exceeds five minutes, the cache expires and your next call pays the <b>1.25&times; write again</b>, not the 0.10&times; read. Caching rewards steady, high-reuse workloads; it can quietly cost you <i>more</i> on sporadic ones. Measure before you assume 70% savings.</p>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="panel">
+        <h3>The numbers, cold</h3>
+        <div class="stat"><span>Cache read discount</span><span class="v">90% off</span></div>
+        <div class="stat"><span>5-min write premium</span><span class="v">+25%</span></div>
+        <div class="stat"><span>1-hour write premium</span><span class="v">+100%</span></div>
+        <div class="stat"><span>Break-even, 5m</span><span class="v">1 hit</span></div>
+        <div class="stat"><span>Break-even, 1h</span><span class="v">2 hits</span></div>
+        <div class="stat"><span>Opus 4.8 hit</span><span class="v">$0.50/MTok</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>OpenAI, for contrast</h3>
+        <div class="stat"><span>Cached input</span><span class="v">50% off</span></div>
+        <div class="stat"><span>Trigger</span><span class="v">&gt;1,024 tok</span></div>
+        <div class="stat"><span>Match step</span><span class="v">128 tok</span></div>
+        <div class="stat"><span>Setup</span><span class="v">automatic</span></div>
+        <div class="stat"><span>Cleared after</span><span class="v">5&ndash;10 min</span></div>
+        <p class="cap" style="margin-top:10px">OpenAI applies caching automatically, no code change, but the discount is 50% &mdash; not Anthropic&rsquo;s 90%. As of 1&nbsp;Oct&nbsp;2024.</p>
+      </div>
+
+      <div class="panel">
+        <h3>How to switch it on</h3>
+        <p class="cap" style="color:var(--ink);margin:0 0 8px">Anthropic &mdash; add to a content block:</p>
+        <div class="beq" style="font-size:12px">&quot;cache_control&quot;:<br>&nbsp;&nbsp;{ &quot;type&quot;: &quot;ephemeral&quot; }</div>
+        <p class="cap" style="margin-top:8px">Default TTL 5&nbsp;min. Add <span class="num">&quot;ttl&quot;:&quot;1h&quot;</span> for the hour. OpenAI needs nothing &mdash; check <span class="num">cached_tokens</span> in usage.</p>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    NextPhase &mdash; the one lever that cuts an agent&rsquo;s bill before you downgrade the model.<br>
+    Sources: platform.claude.com/docs prompt-caching &middot; openai.com/index/api-prompt-caching &middot; 20&nbsp;Jul&nbsp;2026 &middot; free to share.
+  </footer>
+</div>
+</body>
+</html>
