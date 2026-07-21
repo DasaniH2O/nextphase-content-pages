@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graph-Orchestration Starter — Past the Single Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+    --muted:#6E655A; --hairline:#E2DACC; --accent:#F14A00;
+    --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--display);font-weight:600;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 44px 72px}
+  .kicker{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .masthead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:8px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .masthead .r{color:var(--muted)} .masthead b{color:var(--accent);font-weight:600}
+  h1{font-family:var(--display);font-weight:900;letter-spacing:-.02em;line-height:1.04;font-size:46px;margin:26px 0 18px;max-width:20ch}
+  .dek{font-size:19px;font-weight:600;color:var(--ink);max-width:60ch;margin:0 0 8px}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:40px;margin-top:30px;align-items:start}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}.wrap{padding:28px 22px}h1{font-size:34px}}
+  h2{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em;margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+  p{margin:0 0 14px;max-width:62ch}
+  a{color:var(--ink);font-weight:800;text-decoration:none;box-shadow:inset 0 -6px 0 rgba(241,74,0,.28);transition:box-shadow .15s}
+  a:hover{box-shadow:inset 0 -12px 0 rgba(241,74,0,.32)}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--muted);margin:4px 0 0}
+  .rail{font-size:13.5px}
+  .panel{background:var(--panel);border:1px solid var(--hairline);padding:18px 18px 14px;margin-bottom:20px}
+  .panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
+  .stat{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dotted var(--hairline);font-size:13px}
+  .stat:last-child{border-bottom:0} .stat .v{font-family:var(--mono);font-weight:600;text-align:right;white-space:nowrap}
+  .center{background:var(--card);border:1px solid var(--ink);box-shadow:9px 9px 0 var(--panel);padding:22px 24px;margin:14px 0 6px}
+  .center .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
+  .center h3{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 6px}
+  .code{font-family:var(--mono);font-size:12px;line-height:1.65;background:var(--ink);color:#F4ECD8;border-radius:0;padding:16px 18px;white-space:pre;overflow-x:auto;margin:10px 0 4px}
+  .code .c{color:#9c9078} .code .k{color:#F19A6A} .code .s{color:#c7d89a}
+  .step{display:flex;gap:16px;margin:0 0 6px;align-items:baseline}
+  .step .n{font-family:var(--display);font-weight:900;font-size:38px;color:var(--accent);line-height:.9;min-width:46px}
+  .step .t{padding-top:4px}
+  .limit{border:1px dashed var(--accent);background:#FFF6F1;padding:16px 18px;margin:22px 0}
+  .limit .kicker{color:var(--accent)}
+  footer{margin-top:40px;border-top:2px solid var(--ink);padding-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.7}
+  svg{display:block;width:100%;height:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div>COMMENT <b>&ldquo;GRAPH&rdquo;</b> &middot; DELIVERED</div>
+    <div class="r">NextPhase &middot; @nextphase</div>
+  </div>
+  <p class="kicker" style="margin-top:22px">Field Guide &middot; Agent Architecture &middot; as of 20 Jul 2026</p>
+  <h1>Stop building one agent in one loop. Make the agents nodes in a graph.</h1>
+  <p class="dek">The plan&ndash;act&ndash;check loop is one worker grinding a circle. Graph orchestration makes specialized agents into <b>nodes</b>, wired by explicit <b>edges</b> over one shared <b>state</b> &mdash; so work branches and runs in parallel. Below is a runnable LangGraph starter that fans out to two workers at once and loops back only if the review fails. Paste it and run it today.</p>
+
+  <div class="grid">
+    <main>
+      <div class="center">
+        <p class="lbl">The centerpiece &middot; the shape you&rsquo;re building</p>
+        <h3>Fan-out, join, and a guarded loop &mdash; one shared state</h3>
+        <svg viewBox="0 0 620 250" role="img" aria-label="Graph: plan fans out to two parallel workers, joins at review, loops back on fail or ends on pass.">
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#1B160F"/>
+            </marker>
+            <marker id="aro" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#F14A00"/>
+            </marker>
+          </defs>
+          <rect x="12" y="104" width="86" height="42" fill="#F0EBE1" stroke="#1B160F"/>
+          <text x="55" y="130" text-anchor="middle" font-family="IBM Plex Mono" font-size="13" font-weight="600" fill="#1B160F">plan</text>
+          <rect x="250" y="30" width="120" height="42" fill="#FFFFFF" stroke="#1B160F"/>
+          <text x="310" y="56" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#1B160F">worker: research</text>
+          <rect x="250" y="178" width="120" height="42" fill="#FFFFFF" stroke="#1B160F"/>
+          <text x="310" y="204" text-anchor="middle" font-family="IBM Plex Mono" font-size="12" fill="#1B160F">worker: draft</text>
+          <rect x="470" y="104" width="120" height="42" fill="#F0EBE1" stroke="#1B160F"/>
+          <text x="530" y="130" text-anchor="middle" font-family="IBM Plex Mono" font-size="13" font-weight="600" fill="#1B160F">review</text>
+          <path d="M98,118 L250,54" stroke="#1B160F" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+          <path d="M98,132 L250,196" stroke="#1B160F" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+          <path d="M370,54 L470,116" stroke="#1B160F" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+          <path d="M370,196 L470,134" stroke="#1B160F" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+          <path d="M530,146 C530,240 55,242 55,146" stroke="#F14A00" stroke-width="1.8" fill="none" marker-end="url(#aro)" stroke-dasharray="5 4"/>
+          <text x="292" y="238" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#F14A00">loop back if review = FAIL</text>
+          <path d="M590,125 L612,125" stroke="#1B160F" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+          <text x="606" y="146" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#6E655A">END</text>
+          <text x="160" y="20" font-family="IBM Plex Mono" font-size="11" fill="#6E655A">parallel superstep</text>
+        </svg>
+        <p class="cap">Two workers run in the same superstep, not one after the other. The loop is the honest part &mdash; graphs still loop; they just also branch.</p>
+      </div>
+
+      <h2>The starter &mdash; <span style="font-family:var(--mono);font-weight:600">pip install langgraph</span></h2>
+      <div class="code"><span class="c"># LangGraph 1.0 — nodes, edges, one shared state. As of 20 Jul 2026.</span>
+<span class="k">from</span> typing <span class="k">import</span> TypedDict, Annotated
+<span class="k">import</span> operator
+<span class="k">from</span> langgraph.graph <span class="k">import</span> StateGraph, START, END
+
+<span class="c"># 1) SHARED STATE — every node reads/writes this one dict.</span>
+<span class="c">#    Annotated + operator.add MERGES parallel writes instead of clobbering.</span>
+<span class="k">class</span> State(TypedDict):
+    topic: str
+    findings: Annotated[list[str], operator.add]
+    tries: int
+    verdict: str
+
+<span class="c"># 2) NODES — each is a plain function: state in, partial state out.</span>
+<span class="k">def</span> plan(s):      <span class="k">return</span> {<span class="s">"tries"</span>: s[<span class="s">"tries"</span>] + 1}
+<span class="k">def</span> research(s):  <span class="k">return</span> {<span class="s">"findings"</span>: [<span class="s">f"research on {s['topic']}"</span>]}
+<span class="k">def</span> draft(s):     <span class="k">return</span> {<span class="s">"findings"</span>: [<span class="s">f"draft on {s['topic']}"</span>]}
+<span class="k">def</span> review(s):
+    ok = len(s[<span class="s">"findings"</span>]) >= 2
+    <span class="k">return</span> {<span class="s">"verdict"</span>: <span class="s">"PASS"</span> <span class="k">if</span> ok <span class="k">else</span> <span class="s">"FAIL"</span>}
+
+<span class="c"># 3) EDGES — wire the shape. Two edges out of plan = parallel fan-out.</span>
+g = StateGraph(State)
+<span class="k">for</span> name, fn <span class="k">in</span> [(<span class="s">"plan"</span>,plan),(<span class="s">"research"</span>,research),(<span class="s">"draft"</span>,draft),(<span class="s">"review"</span>,review)]:
+    g.add_node(name, fn)
+g.add_edge(START, <span class="s">"plan"</span>)
+g.add_edge(<span class="s">"plan"</span>, <span class="s">"research"</span>)   <span class="c"># these two run</span>
+g.add_edge(<span class="s">"plan"</span>, <span class="s">"draft"</span>)      <span class="c"># in the SAME superstep</span>
+g.add_edge(<span class="s">"research"</span>, <span class="s">"review"</span>)
+g.add_edge(<span class="s">"draft"</span>, <span class="s">"review"</span>)   <span class="c"># join: review waits for both</span>
+
+<span class="c"># 4) THE GUARDED LOOP — pass ends it, fail loops back (capped).</span>
+<span class="k">def</span> route(s):
+    <span class="k">if</span> s[<span class="s">"verdict"</span>] == <span class="s">"PASS"</span> <span class="k">or</span> s[<span class="s">"tries"</span>] >= 3: <span class="k">return</span> END
+    <span class="k">return</span> <span class="s">"plan"</span>
+g.add_conditional_edges(<span class="s">"review"</span>, route, {<span class="s">"plan"</span>: <span class="s">"plan"</span>, END: END})
+
+app = g.compile()
+<span class="k">print</span>(app.invoke({<span class="s">"topic"</span>: <span class="s">"prompt caching"</span>, <span class="s">"findings"</span>: [], <span class="s">"tries"</span>: 0, <span class="s">"verdict"</span>: <span class="s">""</span>}))</div>
+      <p class="cap">Run it: two workers fire together, <span style="font-family:var(--mono)">review</span> joins their merged <span style="font-family:var(--mono)">findings</span>, and the conditional edge either ends or loops &mdash; capped at 3 tries so it can&rsquo;t spin forever. Swap the function bodies for real LLM/tool calls.</p>
+
+      <h2>Make it real &mdash; three swaps</h2>
+      <div class="step"><div class="n">1</div><div class="t"><b>Nodes &rarr; agents.</b> Replace each function body with an LLM or tool call. A node can itself be a full plan&ndash;act loop &mdash; that&rsquo;s the point, loops live <i>inside</i> nodes.</div></div>
+      <div class="step"><div class="n">2</div><div class="t"><b>Add workers to fan out wider.</b> Every extra <span style="font-family:var(--mono)">add_edge("plan", &hellip;)</span> is one more agent running in the same parallel step. The reducer merges their writes.</div></div>
+      <div class="step"><div class="n">3</div><div class="t"><b>Route on real signals.</b> Have <span style="font-family:var(--mono)">route</span> branch on a scored review, a tool result, or a confidence threshold &mdash; not just a length check.</div></div>
+
+      <div class="limit">
+        <p class="kicker">One honest limitation</p>
+        <p style="margin:0">&ldquo;Loop vs. graph&rdquo; is partly a story. LangGraph graphs <b>still support loops</b> &mdash; the conditional edge above <i>is</i> a loop. So loops didn&rsquo;t die; they got composed <i>into</i> graphs. Don&rsquo;t oversell the shift. The real, practical win is parallelism: if you&rsquo;re running one agent in one sequential loop, you&rsquo;re leaving concurrent work on the table. A single linear task gains nothing from a graph &mdash; reach for it when steps genuinely branch.</p>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="panel">
+        <h3>The tools, real &amp; free</h3>
+        <div class="stat"><span>LangGraph</span><span class="v">OSS, v1.0</span></div>
+        <div class="stat"><span>JetBrains Koog</span><span class="v">OSS</span></div>
+        <div class="stat"><span>License cost</span><span class="v">$0</span></div>
+        <p class="cap" style="margin-top:10px">LangChain + LangGraph hit v1.0 as of 20&nbsp;Jul&nbsp;2026; LangGraph is the low-level graph runtime.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Loop vs. graph</h3>
+        <div class="stat"><span>Workers</span><span class="v">1 &rarr; many</span></div>
+        <div class="stat"><span>Execution</span><span class="v">serial &rarr; parallel</span></div>
+        <div class="stat"><span>Wiring</span><span class="v">implicit &rarr; edges</span></div>
+        <div class="stat"><span>State</span><span class="v">local &rarr; shared</span></div>
+        <div class="stat"><span>Loops</span><span class="v">kept, inside</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Go to the source</h3>
+        <p style="margin:0 0 8px;font-size:13px"><a href="https://github.com/langchain-ai/langgraph">github &mdash; langchain-ai/langgraph</a></p>
+        <p class="cap" style="margin:0 0 12px">JS tagline: &ldquo;build resilient language agents as graphs.&rdquo;</p>
+        <p style="margin:0 0 6px;font-size:13px"><a href="https://blog.langchain.com/langchain-langgraph-1dot0/">The v1.0 announcement</a></p>
+        <p class="cap" style="margin:0">Also worth reading: O&rsquo;Reilly, &ldquo;The AI Agents Stack (2026 Edition).&rdquo;</p>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    NextPhase &mdash; the orchestration shape that gets you off the single loop.<br>
+    Sources: github.com/langchain-ai/langgraph &middot; blog.langchain.com/langchain-langgraph-1dot0 &middot; 20&nbsp;Jul&nbsp;2026 &middot; free to share.
+  </footer>
+</div>
+</body>
+</html>
