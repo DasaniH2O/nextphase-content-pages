@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trim Examples for Smarter Models — Before/After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+    --muted:#6E655A; --hairline:#E2DACC; --accent:#F14A00;
+    --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--display);font-weight:600;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 44px 72px}
+  .kicker{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .masthead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:8px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+  .masthead .r{color:var(--muted)} .masthead b{color:var(--accent);font-weight:600}
+  h1{font-family:var(--display);font-weight:900;letter-spacing:-.02em;line-height:1.04;font-size:46px;margin:26px 0 18px;max-width:19ch}
+  .dek{font-size:19px;font-weight:600;color:var(--ink);max-width:60ch;margin:0 0 8px}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:40px;margin-top:30px;align-items:start}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}.wrap{padding:28px 22px}h1{font-size:34px}.ba{grid-template-columns:1fr!important}}
+  h2{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em;margin:34px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+  p{margin:0 0 14px;max-width:62ch}
+  a{color:var(--ink);font-weight:800;text-decoration:none;box-shadow:inset 0 -6px 0 rgba(241,74,0,.28);transition:box-shadow .15s}
+  a:hover{box-shadow:inset 0 -12px 0 rgba(241,74,0,.32)}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--muted);margin:4px 0 0}
+  .rail{font-size:13.5px}
+  .panel{background:var(--panel);border:1px solid var(--hairline);padding:18px 18px 14px;margin-bottom:20px}
+  .panel h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
+  .stat{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dotted var(--hairline);font-size:13px}
+  .stat:last-child{border-bottom:0} .stat .v{font-family:var(--mono);font-weight:600;text-align:right}
+  .center{background:var(--card);border:1px solid var(--ink);box-shadow:9px 9px 0 var(--panel);padding:22px 24px;margin:14px 0 6px}
+  .center .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 4px}
+  .center h3{font-family:var(--display);font-weight:800;font-size:20px;margin:0 0 16px}
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .code{font-family:var(--mono);font-size:12px;line-height:1.65;background:var(--paper);border:1px solid var(--hairline);padding:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .code.before{border-left:3px solid var(--muted)}
+  .code.after{border-left:3px solid var(--accent)}
+  .tagline{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+  .tagline.b{color:var(--muted)} .tagline.a{color:var(--accent)}
+  .strike{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--accent)}
+  .step{display:flex;gap:16px;margin:0 0 6px;align-items:baseline}
+  .step .n{font-family:var(--display);font-weight:900;font-size:38px;color:var(--accent);line-height:.9;min-width:46px}
+  .step .t{padding-top:4px}
+  .limit{border:1px dashed var(--accent);background:#FFF6F1;padding:16px 18px;margin:22px 0}
+  .limit .kicker{color:var(--accent)}
+  blockquote{margin:14px 0;padding:12px 16px;border-left:3px solid var(--ink);background:var(--panel);font-size:15px}
+  blockquote cite{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);font-style:normal;margin-top:8px}
+  footer{margin-top:40px;border-top:2px solid var(--ink);padding-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div>COMMENT <b>&ldquo;TRIM&rdquo;</b> &middot; DELIVERED</div>
+    <div class="r">NextPhase &middot; @nextphase</div>
+  </div>
+  <p class="kicker" style="margin-top:22px">Field Guide &middot; Prompt Engineering &middot; as of 20 Jul 2026</p>
+  <h1>When a smarter model ships, delete the examples &mdash; keep the instruction.</h1>
+  <p class="dek">Anthropic cut Claude Code&rsquo;s system prompt by about 80% on purpose. The reason inverts standard few-shot advice: concrete examples <i>anchor</i> a capable model to imitate them, and a more imaginative model does better with the rule than with your samples. Here is the before/after that shows what &ldquo;trim&rdquo; actually means &mdash; and the one condition under which you should <b>not</b> do it.</p>
+
+  <div class="grid">
+    <main>
+      <blockquote>
+        Newer models &ldquo;want a smaller system prompt&rdquo; &mdash; examples &ldquo;tend to constrain it because it&rsquo;s actually more imaginative than the examples we give it.&rdquo;
+        <cite>Thariq Shihipar, Anthropic (Claude Code team) &mdash; AI Engineer talk, YouTube 4sX_He5c4sI, ~16:30</cite>
+      </blockquote>
+
+      <div class="center">
+        <p class="lbl">The centerpiece &middot; worked example (illustrative)</p>
+        <h3>Same task, two prompts &mdash; a support-ticket classifier</h3>
+        <div class="ba">
+          <div>
+            <p class="tagline b">Before &middot; built for a weaker model</p>
+            <div class="code before">System: Classify the ticket as
+BILLING, BUG, or FEATURE.
+
+Examples:
+&quot;I was charged twice&quot; &rarr; BILLING
+&quot;Refund never arrived&quot; &rarr; BILLING
+&quot;App crashes on upload&quot; &rarr; BUG
+&quot;White screen after login&quot; &rarr; BUG
+&quot;Add dark mode please&quot; &rarr; FEATURE
+&quot;Wish it synced to Notion&quot; &rarr; FEATURE
+
+Follow the pattern exactly.
+Output one word.</div>
+            <p class="cap">~70 tokens of few-shot. The model pattern-matches to these six and mis-files anything that doesn&rsquo;t rhyme with them.</p>
+          </div>
+          <div>
+            <p class="tagline a">After &middot; trimmed for a smarter model</p>
+            <div class="code after">System: Classify the ticket as
+BILLING, BUG, or FEATURE.
+
+BILLING = money, charges, refunds,
+invoices, plan changes.
+BUG = something broken vs. intended.
+FEATURE = a request for new behavior.
+
+Output one word.</div>
+            <p class="cap">The <span class="strike">six examples</span> become one line of decision criteria. Fewer tokens, and edge cases route by the definition instead of by resemblance to a sample.</p>
+          </div>
+        </div>
+        <p class="cap" style="margin-top:14px">What changed: examples deleted, the <b>rule</b> kept and sharpened. That is the 80% pattern in miniature &mdash; steer with criteria and context, not with samples to copy.</p>
+      </div>
+
+      <h2>The re-trim habit &mdash; run it on model-upgrade day</h2>
+      <div class="step"><div class="n">1</div><div class="t"><b>Find the few-shot blocks.</b> Any &ldquo;Example:&rdquo;, &ldquo;e.g. do it like this&rdquo;, or sample input/output pair in your system prompt. These are the anchors.</div></div>
+      <div class="step"><div class="n">2</div><div class="t"><b>Replace each with its rule.</b> Ask what the examples were <i>teaching</i> and write that as one line of criteria. Keep hard constraints (format, safety, output shape) &mdash; trim the illustrations, not the instructions.</div></div>
+      <div class="step"><div class="n">3</div><div class="t"><b>A/B on your own evals.</b> Run trimmed vs. original on a held-out set. Keep the trim only if quality holds or rises. If it drops, this model still wants the examples &mdash; put them back.</div></div>
+
+      <div class="limit">
+        <p class="kicker">One honest limitation</p>
+        <p style="margin:0">This is <b>conditional, not universal.</b> &ldquo;Fewer examples&rdquo; works because these particular newer models are constrained by examples &mdash; it is <i>not</i> a blanket rule that every prompt should be 80% shorter. Weaker and older models historically need the examples to hit the target at all. The move is to <b>re-trim each time a materially smarter model ships</b>, guarded by your evals &mdash; not to strip samples indiscriminately. Also note the primary source is a conference talk, not a written Anthropic changelog.</p>
+      </div>
+    </main>
+
+    <aside class="rail">
+      <div class="panel">
+        <h3>The claim, cold</h3>
+        <div class="stat"><span>Claude Code prompt cut</span><span class="v">~80%</span></div>
+        <div class="stat"><span>Surfaced</span><span class="v">2 Jul 2026</span></div>
+        <div class="stat"><span>Source type</span><span class="v">conf talk</span></div>
+        <div class="stat"><span>Applies to</span><span class="v">newer models</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Why examples hurt now</h3>
+        <p class="cap" style="color:var(--ink);margin:0">A capable model is <b>more imaginative than the examples you&rsquo;d hand it</b>. Given samples, it copies them &mdash; anchoring to your six cases and losing the range it already has. Delete the direction, steer with context.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Trim vs. keep</h3>
+        <div class="stat"><span>Few-shot samples</span><span class="v">trim</span></div>
+        <div class="stat"><span>Decision criteria</span><span class="v">keep</span></div>
+        <div class="stat"><span>Output-format rules</span><span class="v">keep</span></div>
+        <div class="stat"><span>Safety constraints</span><span class="v">keep</span></div>
+        <div class="stat"><span>&ldquo;Follow the pattern&rdquo;</span><span class="v">trim</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Go to the source</h3>
+        <p class="cap" style="color:var(--ink);margin:0 0 6px">Watch the passage yourself:</p>
+        <p style="margin:0;font-size:13px"><a href="https://www.youtube.com/watch?v=4sX_He5c4sI&t=994s">AI Engineer talk &mdash; ~16:30</a></p>
+        <p class="cap" style="margin-top:8px">Thariq Shihipar on why Claude Code&rsquo;s prompt shrank.</p>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    NextPhase &mdash; the rule that flips few-shot advice for frontier models.<br>
+    Sources: the-decoder.com (80% figure, quotes, 2&nbsp;Jul&nbsp;2026) &middot; youtube.com/watch?v=4sX_He5c4sI (primary talk) &middot; 20&nbsp;Jul&nbsp;2026 &middot; free to share.
+  </footer>
+</div>
+</body>
+</html>
