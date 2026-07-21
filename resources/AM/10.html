@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Route routine work to open models, reserve the frontier for high-stakes calls</title>
+<style>
+:root{--paper:#FBF8F2;--card:#FFFFFF;--panel:#F0EBE1;--ink:#1B160F;--muted:#6E655A;--hair:#E2DACC;--accent:#F14A00;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Archivo","Helvetica Neue",Arial,sans-serif;line-height:1.5;}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 40px 72px;}
+.mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:10px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);gap:16px;flex-wrap:wrap;}
+.mast .k{color:var(--ink);}.mast b{color:var(--accent);}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;letter-spacing:-.02em;font-weight:900;margin:26px 0 14px;max-width:18ch;}
+.lede{font-size:19px;max-width:62ch;margin:0;}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:40px;margin-top:30px;}
+@media(max-width:760px){.grid{grid-template-columns:1fr;gap:28px;}.wrap{padding:24px 22px 56px;}}
+.kick{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;font-weight:600;}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;}
+a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:4px solid var(--accent);}
+.matrix{border:1px solid var(--hair);background:var(--card);box-shadow:6px 6px 0 var(--ink);padding:20px 22px;margin:8px 0 4px;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+caption{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:10px;font-weight:600;}
+th{background:var(--ink);color:var(--paper);text-align:left;padding:9px 12px;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;}
+td{border-bottom:1px solid var(--hair);padding:10px 12px;vertical-align:top;}
+td.m{font-family:"IBM Plex Mono",monospace;}
+td.name{font-weight:800;}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.verdict{background:var(--panel);border:1px solid var(--hair);padding:16px 18px;margin:18px 0 2px;}
+.verdict .kick{margin-bottom:6px;}
+.route{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid var(--ink);margin:8px 0 2px;}
+@media(max-width:520px){.route{grid-template-columns:1fr;}}
+.route>div{padding:16px 18px;}
+.route>div:first-child{border-right:2px solid var(--ink);}
+@media(max-width:520px){.route>div:first-child{border-right:none;border-bottom:2px solid var(--ink);}}
+.route h4{margin:0 0 8px;font-size:15px;}
+.route h4 span{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:block;}
+.route ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted);}
+.route li{margin:5px 0;}
+.limit{border-left:3px solid var(--accent);padding:6px 0 6px 16px;margin:26px 0 0;font-size:15px;}
+.limit b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px;}
+.rail .box{background:var(--panel);border:1px solid var(--hair);padding:18px;margin-bottom:20px;}
+.rail .box.stat{background:var(--card);}
+.stat .big{font-family:"Archivo";font-weight:900;font-size:30px;letter-spacing:-.02em;line-height:1;}
+.stat .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.rail dl{margin:0;font-size:14px;}.rail dt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+.rail dd{margin:2px 0 0;}
+footer{margin-top:44px;border-top:2px solid var(--ink);padding-top:12px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);}
+footer a{border-bottom-width:2px;}
+@media print{body{background:#fff;}.matrix{box-shadow:none;}.wrap{padding:0;}}
+</style></head>
+<body><div class="wrap">
+<div class="mast"><span class="k">Comment <b>&ldquo;OPEN&rdquo;</b> &middot; Delivered</span><span>NextPhase &middot; Field Guide No.10</span></div>
+
+<h1>Route routine work to open models, reserve the frontier for high-stakes calls</h1>
+<p class="lede">The argument that open-weight AI wins is about money, not ideology: everyone who isn&rsquo;t selling a frontier model profits when models are cheap and swappable, so they fund and adopt open weights &mdash; &ldquo;commoditize your complement.&rdquo; The checkable backbone is the mid-2026 shortlist below, sitting within single-digit points of the closed frontier on coding and reasoning.</p>
+
+<div class="grid">
+<main>
+<p class="kick">The open-weight shortlist &mdash; centerpiece</p>
+<div class="matrix">
+<table><caption>Mid-2026 open families vs the closed frontier</caption>
+<thead><tr><th>Open family</th><th>Lab / origin</th><th>Best for</th><th>vs closed frontier</th></tr></thead>
+<tbody>
+<tr><td class="name">DeepSeek</td><td>DeepSeek (CN)</td><td>Reasoning, cost-efficient coding</td><td class="m">single-digit gap</td></tr>
+<tr><td class="name">Qwen</td><td>Alibaba (CN)</td><td>General + multilingual, wide sizes</td><td class="m">single-digit gap</td></tr>
+<tr><td class="name">GLM-5.2</td><td>Z.ai / Zhipu (CN)</td><td>Cited leading open LLM; 744B MoE</td><td class="m">near-parity*</td></tr>
+<tr><td class="name">Kimi</td><td>Moonshot (CN)</td><td>Long-context work</td><td class="m">single-digit gap</td></tr>
+<tr><td class="name">MiniMax M2.5</td><td>MiniMax (CN)</td><td>Agentic coding</td><td class="m">~80.2% vs 80.8%*</td></tr>
+<tr><td class="name">Llama</td><td>Meta (US)</td><td>Western-licensed self-host baseline</td><td class="m">single-digit gap</td></tr>
+</tbody></table>
+<p class="tag" style="margin:10px 0 0">* Benchmark figures are aggregator-sourced (not primary), as of 2026-07-01 &mdash; treat as directional. MiniMax M2.5 ~80.2% vs Claude Opus 4.6 80.8% on SWE-bench.</p>
+</div>
+
+<div class="verdict"><p class="kick">The verdict</p><p style="margin:0">Four of the five strongest open leaders are Chinese labs, and on everyday coding and reasoning the gap to the Western closed frontier is now single digits. For most production work, an open model is good enough and far cheaper &mdash; but closed labs still lead on the hardest agentic-coding benchmarks (SWE-Bench Pro) and long-horizon tasks. The winning move isn&rsquo;t all-open or all-closed. It&rsquo;s tiered.</p></div>
+
+<p class="kick" style="margin-top:26px">The routing rule you can apply today</p>
+<div class="route">
+<div><h4><span>Send to open / cheap</span>Route here by default</h4><ul>
+<li>Classification, extraction, summarization</li>
+<li>Bulk or high-volume calls where cost dominates</li>
+<li>Drafts a human reviews before shipping</li>
+<li>Self-host / data-residency requirements</li>
+</ul></div>
+<div><h4><span>Reserve the frontier</span>Pay up when it matters</h4><ul>
+<li>Hardest agentic coding &amp; long multi-step tasks</li>
+<li>High-stakes calls with no human check</li>
+<li>Anything where a single wrong answer is expensive</li>
+<li>Newest capability that lands closed-first</li>
+</ul></div>
+</div>
+
+<p class="limit"><b>This is a thesis, not a fact</b>It predicts an outcome. The strongest counter: closed labs keep a real, recurring lead &mdash; frontier capability tends to arrive months ahead, and they hold an edge on the hardest agentic-coding benchmarks and can absorb capex an open ecosystem can&rsquo;t coordinate. So the honest read is tiered coexistence, not winner-take-all.</p>
+</main>
+
+<aside class="rail">
+<div class="box stat"><div class="big">~80.2% / 80.8%</div><div class="lbl">MiniMax M2.5 vs Claude Opus 4.6, SWE-bench &middot; aggregator &middot; as of 2026-07-01</div></div>
+<div class="box"><dl>
+<dt>The mechanism</dt><dd>Commoditize your complement: clouds, inference buyers, and app builders all profit when models are cheap and swappable &mdash; so they fund open weights to erode closed-lab pricing power.</dd>
+<dt>Who leads open</dt><dd>4 of 5 are Chinese labs (DeepSeek, Qwen, GLM, Kimi, MiniMax); Meta Llama is the US entry.</dd>
+<dt>Where value moves</dt><dd>Weights go free; money shifts to inference hosting, fine-tuning, enterprise support.</dd>
+</dl></div>
+<div class="box"><dl>
+<dt>Read more</dt>
+<dd><a href="https://www.mindstudio.ai/blog/open-source-ai-us-business-model-problem">MindStudio &mdash; the business-model problem</a></dd>
+<dd><a href="https://mitsloan.mit.edu/ideas-made-to-matter/ai-open-models-have-benefits-so-why-arent-they-more-widely-used">MIT Sloan &mdash; open-model adoption</a></dd>
+<dd><a href="https://www.oreilly.com/radar/the-open-source-agent-toolkit-in-2026/">O&rsquo;Reilly &mdash; open-source agent toolkit 2026</a></dd>
+</dl></div>
+</aside>
+</div>
+
+<footer>NextPhase &middot; pick the model per job, not per tribe. &nbsp;Sources: mindstudio.ai &middot; mitsloan.mit.edu &middot; oreilly.com &middot; wavect.io (aggregator) &middot; 2026-07-20 &middot; free to share.</footer>
+</div></body></html>
