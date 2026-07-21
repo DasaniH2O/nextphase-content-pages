@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Treat every untrusted input as attack surface: the Hugging Face breach, step by step</title>
+<style>
+:root{--paper:#FBF8F2;--card:#FFFFFF;--panel:#F0EBE1;--ink:#1B160F;--muted:#6E655A;--hair:#E2DACC;--accent:#F14A00;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Archivo","Helvetica Neue",Arial,sans-serif;line-height:1.5;}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 40px 72px;}
+.mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:10px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);gap:16px;flex-wrap:wrap;}
+.mast .k{color:var(--ink);}.mast b{color:var(--accent);}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.05;letter-spacing:-.02em;font-weight:900;margin:26px 0 14px;max-width:18ch;}
+.lede{font-size:19px;max-width:62ch;margin:0;}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:40px;margin-top:30px;}
+@media(max-width:760px){.grid{grid-template-columns:1fr;gap:28px;}.wrap{padding:24px 22px 56px;}}
+.kick{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;font-weight:600;}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;}
+a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:4px solid var(--accent);}
+/* attack chain centerpiece */
+.chain{border:1px solid var(--hair);background:var(--card);box-shadow:6px 6px 0 var(--ink);padding:6px 22px 20px;margin:8px 0 4px;}
+.chain h4{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);}
+.link{display:grid;grid-template-columns:40px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--hair);}
+.link:first-of-type{border-top:none;}
+.link .n{font-family:"Archivo";font-weight:900;font-size:26px;color:var(--accent);line-height:1;}
+.link .s{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.link h5{margin:2px 0 3px;font-size:16px;}
+.link p{margin:0;color:var(--muted);font-size:14px;}
+.check{margin:6px 0 2px;padding:0;list-style:none;counter-reset:c;}
+.check li{border-top:1px solid var(--hair);padding:12px 0 12px 40px;position:relative;font-size:15px;}
+.check li:first-child{border-top:2px solid var(--ink);}
+.check li::before{content:"";position:absolute;left:6px;top:15px;width:14px;height:14px;border:2px solid var(--accent);}
+.check b{display:block;}
+.check span{color:var(--muted);font-size:13.5px;}
+.limit{border-left:3px solid var(--accent);padding:6px 0 6px 16px;margin:26px 0 0;font-size:15px;}
+.limit b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px;}
+.rail .box{background:var(--panel);border:1px solid var(--hair);padding:18px;margin-bottom:20px;}
+.rail .box.stat{background:var(--card);}
+.stat .big{font-family:"Archivo";font-weight:900;font-size:34px;letter-spacing:-.02em;line-height:1;}
+.stat .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.rail dl{margin:0;font-size:14px;}.rail dt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+.rail dd{margin:2px 0 0;}
+footer{margin-top:44px;border-top:2px solid var(--ink);padding-top:12px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);}
+footer a{border-bottom-width:2px;}
+@media print{body{background:#fff;}.chain{box-shadow:none;}.wrap{padding:0;}}
+</style></head>
+<body><div class="wrap">
+<div class="mast"><span class="k">Comment <b>&ldquo;BREACH&rdquo;</b> &middot; Delivered</span><span>NextPhase &middot; Field Guide No.07</span></div>
+
+<h1>Treat every untrusted input as attack surface &mdash; the Hugging Face breach, step by step</h1>
+<p class="lede">Over one weekend, an attacker uploaded a malicious dataset to Hugging Face, abused two code-execution paths in the dataset pipeline, and moved laterally across internal clusters &mdash; a log of 17,000+ events. If you deploy agents that touch files, datasets, or user uploads, that pipeline is your pipeline.</p>
+
+<div class="grid">
+<main>
+<p class="kick">The attack chain &mdash; centerpiece</p>
+<div class="chain"><h4>As disclosed 2026-07-16 &middot; huggingface.co</h4>
+<div class="link"><div class="n">1</div><div><div class="s">Entry</div><h5>Malicious dataset upload</h5><p>The attacker published a dataset crafted to trigger code execution when the platform processed it &mdash; ordinary-looking untrusted input.</p></div></div>
+<div class="link"><div class="n">2</div><div><div class="s">Execution &times;2</div><h5>Two code-execution paths abused</h5><p>A remote-code dataset loader and a template-injection in a dataset configuration each ran attacker code on a processing worker.</p></div></div>
+<div class="link"><div class="n">3</div><div><div class="s">Escalation</div><h5>Worker &rarr; node access</h5><p>From the worker, the attacker escalated to node-level access on the cluster.</p></div></div>
+<div class="link"><div class="n">4</div><div><div class="s">Harvest</div><h5>Cloud &amp; cluster credentials taken</h5><p>Service credentials were pulled from the compromised node.</p></div></div>
+<div class="link"><div class="n">5</div><div><div class="s">Spread</div><h5>Lateral movement over one weekend</h5><p>Using harvested creds, the attacker moved across internal clusters. The action log recorded more than 17,000 events.</p></div></div>
+</div>
+
+<p class="kick" style="margin-top:28px">Lessons for agent deployers &mdash; harden this today</p>
+<ul class="check">
+<li><b>Never run untrusted files in a privileged context.</b><span>Datasets, uploads, tool outputs, scraped pages &mdash; process them in a sandbox with no credentials and no network to internal services.</span></li>
+<li><b>Kill code-execution loaders and template injection.</b><span>Disable remote-code dataset/config loaders (e.g. <span class="mono">trust_remote_code=False</span>). Never feed untrusted values into a template or format string that the runtime evaluates.</span></li>
+<li><b>Give the worker nothing worth stealing.</b><span>Scope credentials to the single task, short-lived, so a compromised worker can&rsquo;t escalate to node or cluster access.</span></li>
+<li><b>Segment so one worker can&rsquo;t reach the rest.</b><span>Block lateral network paths between processing workers and internal clusters; deny by default.</span></li>
+<li><b>Rotate tokens and watch the log.</b><span>HF urges all users to rotate access tokens and review account activity. Alert on credential access and east-west traffic, not just failed logins.</span></li>
+</ul>
+
+<p class="limit"><b>Read the scary framing with an asterisk</b>The &ldquo;fully autonomous, no human at the keyboard&rdquo; description is Hugging Face&rsquo;s own assessment. HF says the model that powered the attacker is still unknown, and <a href="https://techcrunch.com/2026/07/20/hugging-face-confirms-breach-affected-internal-datasets-and-credentials-urges-users-to-take-action/">TechCrunch</a> notes HF did not provide evidence for the autonomy claim when asked. The disclosure also names no AI provider &mdash; only &ldquo;frontier models behind commercial APIs.&rdquo; Treat the autonomy angle as their read; the untrusted-input lesson holds either way.</p>
+</main>
+
+<aside class="rail">
+<div class="box stat"><div class="big">17,000+</div><div class="lbl">recorded attacker events &middot; as of 2026-07-16</div></div>
+<div class="box"><dl>
+<dt>Disclosed</dt><dd>2026-07-16 by Hugging Face</dd>
+<dt>Read it</dt><dd><a href="https://huggingface.co/blog/security-incident-july-2026">huggingface.co / security-incident-july-2026</a></dd>
+<dt>Entry vector</dt><dd>Malicious uploaded dataset</dd>
+<dt>Exec paths</dt><dd>Remote-code loader + config template injection</dd>
+<dt>Impact</dt><dd>Internal datasets + several service credentials. No evidence public models/datasets/Spaces were tampered; supply chain verified clean.</dd>
+<dt>HF&rsquo;s ask</dt><dd>All users rotate access tokens &amp; review activity</dd>
+</dl></div>
+<div class="box"><dl>
+<dt>Corroboration</dt><dd><a href="https://thehackernews.com/2026/07/worlds-largest-ai-model-repository.html">The Hacker News</a>, TechCrunch, BleepingComputer</dd>
+</dl></div>
+</aside>
+</div>
+
+<footer>NextPhase &middot; ship agents, not incidents. &nbsp;Sources: huggingface.co/blog/security-incident-july-2026 &middot; techcrunch.com &middot; thehackernews.com &middot; 2026-07-20 &middot; free to share.</footer>
+</div></body></html>
