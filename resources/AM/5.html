@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GitHub Spec Kit — the exact setup</title><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><style>:root{--paper:#FBF8F2;--card:#fff;--panel:#F0EBE1;--ink:#1B160F;--muted:#6E655A;--faint:#A79C8C;--line:#E2DACC;--accent:#F14A00}
+*{box-sizing:border-box;margin:0}body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:14px;line-height:1.5;padding:40px 30px 60px}
+.sheet{max-width:900px;margin:0 auto}.mast{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--ink);padding-bottom:8px}.mast .d{color:var(--accent);font-weight:600}
+.kick{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-top:26px}
+h1{font-family:Archivo;font-weight:900;font-size:38px;line-height:1.03;letter-spacing:-.02em;margin:8px 0 10px}h1 em{font-style:italic;color:var(--accent)}
+.sub{font-size:15px;color:var(--muted);max-width:66ch;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:1.9fr 1fr;gap:26px}@media(max-width:720px){.grid{grid-template-columns:1fr}body{padding:24px 16px}h1{font-size:29px}}
+h2{font-family:Archivo;font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.step{display:flex;gap:14px;margin-bottom:13px}.step .n{font-family:Archivo;font-weight:900;font-size:28px;line-height:1;color:var(--accent);min-width:32px}.step b{font-family:Archivo}
+pre{background:var(--ink);color:#F3EEE4;font-size:12.5px;line-height:1.5;padding:15px 17px;border-radius:8px;overflow-x:auto;margin:9px 0}pre .c{color:#9b9287}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0}th{background:var(--ink);color:var(--paper);text-align:left;padding:7px 9px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}td{padding:7px 9px;border-bottom:1px solid var(--line)}td.n{font-variant-numeric:tabular-nums;text-align:right}tr.bad td{color:var(--accent);font-weight:600}
+.note{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;color:#5a5045;margin:13px 0}
+.chk{list-style:none;font-size:13px}.chk li{padding:5px 0 5px 20px;position:relative;color:#4d463e}.chk li:before{content:"›";position:absolute;left:2px;color:var(--accent);font-weight:700}
+.rail .box{border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:16px;background:var(--card)}.rail h3{font-family:Archivo;font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.big{font-family:Archivo;font-weight:900;font-size:26px;color:var(--accent);line-height:1}
+.foot{margin-top:28px;border-top:1px solid var(--line);padding-top:12px;font-size:11px;color:var(--faint);line-height:1.6}.foot a{color:var(--muted)}
+.hd{font-family:"Archivo";font-weight:800;font-size:13px;margin-top:4px}</style></head><body><div class="sheet">
+<div class="mast"><span>COMMENT <b style="color:var(--ink)">&ldquo;SPECKIT&rdquo;</b> <span class="d">&middot; DELIVERED</span></span><span>NextPhase</span></div>
+<div class="kick">GitHub Spec Kit &middot; setup</div>
+<h1>Turn &ldquo;build me an app and pray&rdquo; into an <em>executable spec</em> &mdash; the exact Spec Kit setup</h1>
+<p class="sub">Spec Kit (123k stars) makes you write the spec first, then drives your AI agent through a fixed sequence so the spec generates the build. Here is the precise install and command order &mdash; and the honest prerequisites nobody mentions.</p>
+<div class="grid"><div class="main">
+<h2>Prerequisites (get these first)</h2>
+<ul class="chk"><li><b>uv</b> (the Python package manager)</li><li><b>Python 3.11+</b></li><li><b>Git</b></li><li>A supported AI coding agent &mdash; <b>30+</b> work (Claude Code, Cursor, Codex, &hellip;)</li></ul>
+<h2>Install &amp; init</h2>
+<pre><span class="c"># install the CLI</span>
+uv tool install specify-cli
+<span class="c"># scaffold your project for a specific agent</span>
+specify init my-project --integration claude</pre>
+<h2>Then run the sequence in your agent</h2>
+<div class="step"><div class="n">1</div><div><b>/speckit.constitution</b> &mdash; set the project&rsquo;s non-negotiable rules first.</div></div>
+<div class="step"><div class="n">2</div><div><b>/speckit.specify</b> &mdash; describe <em>what</em> and <em>why</em>, not the stack.</div></div>
+<div class="step"><div class="n">3</div><div><b>/speckit.plan</b> &mdash; the agent proposes the technical plan.</div></div>
+<div class="step"><div class="n">4</div><div><b>/speckit.tasks</b> &mdash; break the plan into ordered, checkable tasks.</div></div>
+<div class="step"><div class="n">5</div><div><b>/speckit.implement</b> &mdash; the agent builds against the spec, task by task.</div></div>
+<div class="note"><b>7 core commands + 3 optional</b> (10 total). The spec is the source of truth &mdash; when the build drifts, you fix the spec, not the code.</div>
+</div><div class="rail">
+<div class="box"><h3>The repo</h3><div class="big">123k</div><div style="font-size:12px;color:var(--faint);margin-bottom:8px">stars &middot; 10.9k forks</div>
+<table><tr><td>Latest</td><td class="n">v0.13.0</td></tr><tr><td>Released</td><td class="n">Jul 17 2026</td></tr><tr><td>Releases</td><td class="n">195</td></tr><tr><td>License</td><td class="n">MIT</td></tr></table>
+<div style="font-size:11px;color:var(--faint);margin-top:6px">github.com/github/spec-kit &middot; as of Jul 20 2026</div></div>
+<div class="box" style="background:var(--panel)"><h3>Straight talk</h3><div style="font-size:12.5px;color:#5a5045">It&rsquo;s a <b>discipline plus a CLI, not a magic button</b>. You install the toolchain, bring your own agent, and run the whole multi-step flow. &ldquo;Killed vibe coding&rdquo; is editorial &mdash; the repo itself still says &ldquo;from vibe-coding to AI-native development.&rdquo;</div></div>
+</div></div>
+<div class="foot"><b>Sources:</b> <a href="https://github.com/github/spec-kit">github.com/github/spec-kit</a> &middot; <a href="https://github.com/github/spec-kit/blob/main/README.md">README &middot; commands &amp; agents</a> &middot; as of 20 Jul 2026 &middot; free to share.</div>
+</div></body></html>
