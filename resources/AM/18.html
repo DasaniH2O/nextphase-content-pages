@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The three-beat template that turns one AI clip into a paid series</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#161821;
+    --muted:#63636f; --hair:#E1DDD3; --accent:#1F6FEB;
+    --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased}
+  a{color:var(--ink);text-decoration:none;font-weight:800;border-bottom:3px solid var(--accent)}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 44px 72px}
+  .mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);
+    padding-bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .mast .kw{color:var(--accent);font-weight:600}
+  .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:34px 0 10px}
+  h1{font-weight:900;font-size:46px;line-height:1.03;letter-spacing:-.02em;margin:0 0 18px;max-width:17ch}
+  h1 .hl{color:var(--accent)}
+  .lead{font-size:19px;line-height:1.5;max-width:60ch;margin:0 0 6px;font-weight:500}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:38px;margin-top:34px}
+  h2{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+    border-top:1.5px solid var(--hair);padding-top:12px;margin:38px 0 14px}
+  p{line-height:1.55;font-size:16px;font-weight:500}
+  code{font-family:var(--mono);font-size:13px;background:var(--panel);padding:2px 6px;border:1px solid var(--hair)}
+  .beats{background:var(--card);border:1px solid var(--ink);box-shadow:8px 8px 0 var(--ink);padding:8px 0;margin:8px 0}
+  .beat{display:grid;grid-template-columns:70px 1fr;gap:16px;padding:18px 22px;border-bottom:1px solid var(--hair)}
+  .beat:last-child{border-bottom:0}
+  .beat .n{font-weight:900;font-size:50px;line-height:.85;color:var(--accent)}
+  .beat h3{margin:0 0 6px;font-size:19px;font-weight:800}
+  .beat p{margin:0;font-size:15px;color:#2a2b33}
+  .beat .q{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:8px}
+  pre{font-family:var(--mono);font-size:12.5px;background:var(--ink);color:var(--paper);padding:16px;overflow:auto;line-height:1.55;margin:12px 0}
+  pre .c{color:#8fb7ff}
+  .ex{background:var(--panel);border:1px solid var(--hair);border-left:6px solid var(--accent);padding:16px 18px;margin:12px 0}
+  .ex h4{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+  .ex p{font-size:14.5px;margin:0 0 6px}
+  table{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:14px}
+  th{background:var(--ink);color:var(--paper);text-align:left;padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  td{padding:9px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+  td.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .rail .box{background:var(--panel);border:1px solid var(--hair);padding:16px 18px;margin-bottom:18px}
+  .rail h4{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+  .rail ul{margin:0;padding-left:16px;font-size:13.5px;line-height:1.5;font-weight:500}
+  .rail li{margin-bottom:7px}
+  .caveat{background:var(--card);border:1px solid var(--ink);border-left:6px solid var(--accent);padding:16px 18px}
+  .caveat h4{color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px}
+  .caveat p{font-size:14px;margin:0}
+  .foot{border-top:2px solid var(--ink);margin-top:44px;padding-top:14px;font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted);letter-spacing:.04em}
+  .foot b{color:var(--ink)}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:33px}.wrap{padding:26px 20px 50px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <span>COMMENT <span class="kw">&ldquo;FORMULA&rdquo;</span> &middot; DELIVERED</span>
+    <span>NEXTPHASE &middot; @AMINE</span>
+  </div>
+
+  <div class="kicker">Template &middot; AI Serial Video</div>
+  <h1>The transferable asset isn&rsquo;t the model &mdash; it&rsquo;s <span class="hl">a three-beat template that forces a part two.</span></h1>
+  <p class="lead">A viral case study paired an AI text-to-video clip with a repeatable script and paywalled the sequels. Strip out the hype and one thing carries: the story shape. Here it is, ready to paste into any writing model, with a worked example and the real cost math.</p>
+
+  <div class="grid">
+    <div class="main">
+      <h2>The three-beat template</h2>
+      <div class="beats">
+        <div class="beat"><div class="n">1</div><div>
+          <h3>Recognizable cast</h3>
+          <p>Open on faces or figures the viewer already knows in the first two seconds. Familiarity buys the watch before the story earns it.</p>
+          <div class="q">SLOT: [two well-known figures the audience recognizes on sight]</div>
+        </div></div>
+        <div class="beat"><div class="n">2</div><div>
+          <h3>One absurd conflict</h3>
+          <p>Exactly one impossible situation &mdash; not two. The single clean premise is what makes the clip screenshot-able and easy to describe to a friend.</p>
+          <div class="q">SLOT: [one impossible situation those figures are forced into]</div>
+        </div></div>
+        <div class="beat"><div class="n">3</div><div>
+          <h3>Cliffhanger that demands the sequel</h3>
+          <p>End on the frame before the resolution. The unanswered question is the entire business model &mdash; it&rsquo;s what a viewer will pay to see resolved.</p>
+          <div class="q">SLOT: [the exact moment you cut &mdash; right before the payoff]</div>
+        </div></div>
+      </div>
+
+      <h2>Paste this into your writing model</h2>
+      <pre><span class="c"># Serial clip script — fill the three slots, keep the order</span>
+CAST:      [two recognizable figures]
+CONFLICT:  [one absurd situation they're forced into]
+CUT ON:    [the frame right before resolution]
+
+Write a 15-second shot list for beat 2, photoreal, single
+location. End the script on CUT ON as an open question.
+Title = the question. First comment = "Part 2?"</pre>
+
+      <div class="ex">
+        <h4>Worked example</h4>
+        <p><b>Cast:</b> two famous rival footballers.</p>
+        <p><b>Conflict:</b> they&rsquo;re handcuffed together and have to win a 2-v-11 match to be released.</p>
+        <p><b>Cut on:</b> the ref blows the whistle for a last-minute penalty &mdash; screen ends before the kick.</p>
+        <p style="margin-top:8px;color:var(--muted);font-size:13px">Episode 1 posts free for reach; the penalty outcome is Episode 2, behind the sub.</p>
+      </div>
+
+      <h2>The 30-dollar stack &amp; where the money actually leaks</h2>
+      <table>
+        <thead><tr><th>Layer</th><th>Tool in the case study</th><th>Real cost (as of Jul 2026)</th></tr></thead>
+        <tbody>
+          <tr><td>Script</td><td>Claude Code</td><td class="mono">~$20 / mo plan</td></tr>
+          <tr><td>Clip</td><td>Seedance 2.0 (ByteDance)</td><td class="mono">$0.022&ndash;0.15 / sec*</td></tr>
+          <tr><td>Paywall</td><td>Fanvue</td><td class="mono">creator keeps 80%</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:4px">*Official generation ran ~$0.14&ndash;0.15/sec (TechNode, 2026-03-05); third-party resellers listed ~$0.022&ndash;0.045/sec (AtlasCloud, 2026-03-06). A 15-sec clip is roughly $0.30&ndash;$2.25 depending on route.</p>
+    </div>
+
+    <aside class="rail">
+      <div class="box">
+        <h4>The number the tool part hides</h4>
+        <ul>
+          <li>Fanvue takes <b>20%</b> off the top &mdash; gross is not net</li>
+          <li>Seedance 2.0&rsquo;s own API was <b>not publicly open</b> (Mar 2026); you route through resellers</li>
+          <li>AI content must be <b>disclosed</b> on Fanvue</li>
+          <li>Claude writes the script &mdash; it does not make the money</li>
+        </ul>
+      </div>
+      <div class="caveat">
+        <h4>The honest catch</h4>
+        <p>The headline &ldquo;$3,678 in a week, ~614 subscribers, 2M views&rdquo; is one creator&rsquo;s self-reported figure from a single X post &mdash; unverified. Treat it as a possibility ceiling, not a forecast. What&rsquo;s verifiable is the template and the tool costs above; the earnings are not.</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <b>NEXTPHASE</b> &mdash; steal the structure, not the story.<br>
+    Sources: technode.com Seedance 2.0 pricing (2026-03-05) &middot; atlascloud.ai Seedance 2.0 cost breakdown (2026-03-06) &middot; legal.fanvue.com creator earnings (80/20) &middot; verified 2026-07-21 &middot; free to share.
+  </div>
+</div>
+</body>
+</html>
