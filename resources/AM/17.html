@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Point Claude Code at your vault and it links your notes while you sleep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+    --muted:#6E655A; --hair:#E2DACC; --accent:#F14A00;
+    --display:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--display);-webkit-font-smoothing:antialiased}
+  a{color:var(--ink);text-decoration:none;font-weight:800;
+    box-shadow:inset 0 -0.32em 0 rgba(241,74,0,.28);
+    border-bottom:3px solid var(--accent)}
+  .wrap{max-width:1040px;margin:0 auto;padding:40px 44px 72px}
+  .mast{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:2px solid var(--ink);padding-bottom:12px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .mast .kw{color:var(--accent);font-weight:600}
+  .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);margin:34px 0 10px}
+  h1{font-weight:900;font-size:47px;line-height:1.02;letter-spacing:-.02em;
+    margin:0 0 18px;max-width:16ch}
+  h1 .hl{color:var(--accent)}
+  .lead{font-size:19px;line-height:1.5;max-width:60ch;margin:0 0 6px;font-weight:500}
+  .grid{display:grid;grid-template-columns:2fr 1fr;gap:38px;margin-top:34px}
+  h2{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);border-top:1.5px solid var(--hair);padding-top:12px;margin:38px 0 14px}
+  p{line-height:1.55;font-size:16px;font-weight:500}
+  .step{display:grid;grid-template-columns:64px 1fr;gap:16px;
+    padding:16px 0;border-bottom:1px solid var(--hair)}
+  .step .n{font-weight:900;font-size:46px;line-height:.9;color:var(--accent);
+    font-family:var(--display)}
+  .step h3{margin:2px 0 6px;font-size:18px;font-weight:800}
+  .step p{margin:0;font-size:15px;color:#2c261d}
+  code{font-family:var(--mono);font-size:13px;background:var(--panel);
+    padding:2px 6px;border:1px solid var(--hair)}
+  pre{font-family:var(--mono);font-size:12.5px;background:var(--ink);color:var(--paper);
+    padding:14px 16px;overflow:auto;line-height:1.5;margin:10px 0}
+  pre .c{color:#c9a27a}
+  .rail .box{background:var(--panel);border:1px solid var(--hair);padding:16px 18px;margin-bottom:18px}
+  .rail h4{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 10px}
+  .rail ul{margin:0;padding-left:16px;font-size:13.5px;line-height:1.5;font-weight:500}
+  .rail li{margin-bottom:7px}
+  .caveat{background:var(--card);border:1px solid var(--ink);
+    border-left:6px solid var(--accent);padding:16px 18px}
+  .caveat h4{color:var(--ink)}
+  .caveat p{font-size:14px;margin:0}
+  .art{background:var(--card);border:1px solid var(--hair);
+    box-shadow:8px 8px 0 var(--ink);padding:24px;margin:8px 0 6px}
+  table{width:100%;border-collapse:collapse;margin:10px 0 4px;font-size:14px}
+  th{background:var(--ink);color:var(--paper);text-align:left;padding:9px 12px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  td{padding:9px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+  td.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .foot{border-top:2px solid var(--ink);margin-top:44px;padding-top:14px;
+    font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted);letter-spacing:.04em}
+  .foot b{color:var(--ink)}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:34px}.wrap{padding:26px 20px 50px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mast">
+    <span>COMMENT <span class="kw">&ldquo;VAULT&rdquo;</span> &middot; DELIVERED</span>
+    <span>NEXTPHASE &middot; @AMINE</span>
+  </div>
+
+  <div class="kicker">Setup Guide &middot; Claude Code &times; Obsidian</div>
+  <h1>Point Claude Code at your vault and it <span class="hl">links your notes while you sleep.</span></h1>
+  <p class="lead">An Obsidian vault is just a folder of plain-text <code>.md</code> files. Claude Code reads and writes local files from the terminal. Put a scheduled job between them and every night it crawls your newest notes, wiki-links them to older ones, flags contradictions, and drafts a &ldquo;what your brain missed&rdquo; note. No plugin &mdash; because it&rsquo;s all markdown.</p>
+
+  <div class="grid">
+    <div class="main">
+
+      <h2>The nightly pipeline</h2>
+      <div class="art">
+        <svg viewBox="0 0 620 190" width="100%" role="img" aria-label="Nightly cron pipeline schematic" font-family="'IBM Plex Mono',monospace">
+          <defs>
+            <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 z" fill="#F14A00"/>
+            </marker>
+          </defs>
+          <rect x="8" y="70" width="120" height="52" fill="#F0EBE1" stroke="#1B160F"/>
+          <text x="68" y="92" text-anchor="middle" font-size="12" font-weight="600" fill="#1B160F">cron @ 02:00</text>
+          <text x="68" y="108" text-anchor="middle" font-size="10" fill="#6E655A">every night</text>
+
+          <rect x="182" y="70" width="140" height="52" fill="#1B160F"/>
+          <text x="252" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="#FBF8F2">claude code</text>
+          <text x="252" y="106" text-anchor="middle" font-size="10" fill="#c9a27a">reads CLAUDE.md</text>
+
+          <rect x="380" y="12" width="228" height="30" fill="#FFFFFF" stroke="#E2DACC"/>
+          <text x="392" y="31" font-size="11" fill="#1B160F">+ [[wikilinks]] newest &rarr; older</text>
+          <rect x="380" y="52" width="228" height="30" fill="#FFFFFF" stroke="#E2DACC"/>
+          <text x="392" y="71" font-size="11" fill="#1B160F">flag contradictions</text>
+          <rect x="380" y="92" width="228" height="30" fill="#FFFFFF" stroke="#E2DACC"/>
+          <text x="392" y="111" font-size="11" fill="#1B160F">draft &ldquo;brain missed&rdquo; note</text>
+          <rect x="380" y="132" width="228" height="30" fill="#F0EBE1" stroke="#1B160F"/>
+          <text x="392" y="151" font-size="11" font-weight="600" fill="#1B160F">write .md back to vault</text>
+
+          <line x1="128" y1="96" x2="176" y2="96" stroke="#F14A00" stroke-width="2" marker-end="url(#ar)"/>
+          <line x1="322" y1="90" x2="372" y2="27" stroke="#F14A00" stroke-width="2" marker-end="url(#ar)"/>
+          <line x1="322" y1="94" x2="372" y2="67" stroke="#F14A00" stroke-width="2" marker-end="url(#ar)"/>
+          <line x1="322" y1="98" x2="372" y2="107" stroke="#F14A00" stroke-width="2" marker-end="url(#ar)"/>
+          <line x1="322" y1="102" x2="372" y2="147" stroke="#F14A00" stroke-width="2" marker-end="url(#ar)"/>
+        </svg>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-top:0">One command a night. Claude Code opens the vault, reads the map you generated once, and touches only markdown.</p>
+
+      <h2>Set it up once</h2>
+
+      <div class="step">
+        <div class="n">1</div>
+        <div>
+          <h3>Install Claude Code and open the vault folder</h3>
+          <p>Install the CLI (<code>npm i -g @anthropic-ai/claude-code</code>), then <code>cd</code> into the folder your <code>.obsidian</code> settings live in &mdash; that folder <em>is</em> your vault. You&rsquo;ll know it&rsquo;s right when <code>ls -a</code> shows a <code>.obsidian</code> directory.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">2</div>
+        <div>
+          <h3>Run <code>/init</code> to generate the map</h3>
+          <p>Inside Claude Code, type <code>/init</code>. It writes a <code>CLAUDE.md</code> at the vault root describing your folder structure, note conventions, and tags. This is the file the nightly job reads first &mdash; edit it once to tell the agent your linking rules.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">3</div>
+        <div>
+          <h3>Save the nightly instruction as a prompt file</h3>
+          <p>Drop a plain <code>night-shift.md</code> in the vault with the job: &ldquo;Read notes modified in the last 24h. Add <code>[[wikilinks]]</code> to related older notes. Flag any note that contradicts another. Write one dated <code>Brain-Missed.md</code> summary.&rdquo; Exact instructions beat clever ones here.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">4</div>
+        <div>
+          <h3>Schedule it with cron</h3>
+          <p>A cron job is a task your machine runs on a clock. Add one line so it fires at 2&nbsp;a.m. &mdash; assuming the machine is on and awake at that hour.</p>
+          <pre><span class="c"># crontab -e  &rarr; add one line:</span>
+0 2 * * *  cd ~/vault &amp;&amp; claude -p "$(cat night-shift.md)" \
+           --allowedTools "Read,Edit,Write" &gt;&gt; ~/vault/.night.log 2&gt;&amp;1</pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">5</div>
+        <div>
+          <h3>Verify the first run before you trust it</h3>
+          <p>Next morning, open <code>.night.log</code> and the new <code>Brain-Missed.md</code>. Run <code>git diff</code> to see exactly which notes it edited. You&rsquo;ll know it worked when the diff is small, sane, and only touches markdown. If it rewrote whole notes, tighten the prompt in step&nbsp;3 and narrow <code>--allowedTools</code>.</p>
+        </div>
+      </div>
+
+      <h2>What each nightly pass produces</h2>
+      <table>
+        <thead><tr><th>Pass</th><th>Reads</th><th>Writes</th></tr></thead>
+        <tbody>
+          <tr><td>Link</td><td>notes edited &lt;24h</td><td class="mono">[[wikilinks]] appended</td></tr>
+          <tr><td>Contradiction</td><td>linked note pairs</td><td class="mono">&ldquo;conflicts with&rdquo; callout</td></tr>
+          <tr><td>Digest</td><td>the day&rsquo;s new notes</td><td class="mono">Brain-Missed-YYYY-MM-DD.md</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="rail">
+      <div class="box">
+        <h4>Prerequisites</h4>
+        <ul>
+          <li><b>Obsidian</b> &mdash; free; the vault is a plain folder of <code>.md</code> files</li>
+          <li><b>Claude Code</b> &mdash; needs a Claude Pro/Max plan or API credit; burns usage every run</li>
+          <li><b>Terminal + cron</b> &mdash; built into macOS/Linux; Task Scheduler on Windows</li>
+          <li><b>git</b> &mdash; strongly advised before step&nbsp;4</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>Cost &amp; time</h4>
+        <ul>
+          <li>Setup: ~20 min, once</li>
+          <li>Per run: a few minutes of Claude Code usage; larger vaults (thousands of notes) run slower and cost more</li>
+          <li>No plugin, no subscription beyond Claude Code</li>
+        </ul>
+      </div>
+      <div class="caveat">
+        <h4>The honest catch</h4>
+        <p>This job needs read <em>and write</em> access to your entire second brain, unattended. Before you trust it: put the vault under <code>git</code>, commit a clean baseline, and back it up. Then every night&rsquo;s changes are a reviewable, revertible diff &mdash; not a silent overwrite.</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <b>NEXTPHASE</b> &mdash; build the boring automation, keep the leverage.<br>
+    Sources: docs.claude.com/claude-code (/init, cron pattern) &middot; starmorph.com Obsidian&times;Claude Code guide &middot; medium.com/@KanikaBK 24/7 vault agent &middot; verified 2026-07-21 &middot; free to share.
+  </div>
+</div>
+</body>
+</html>
