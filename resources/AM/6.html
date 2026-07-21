@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Hallmark once and your AI-built UIs stop looking AI-built</title>
+<style>
+:root{--paper:#FBF8F2;--card:#FFFFFF;--panel:#F0EBE1;--ink:#1B160F;--muted:#6E655A;--hair:#E2DACC;--accent:#F14A00;}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Archivo","Helvetica Neue",Arial,sans-serif;line-height:1.5;}
+.wrap{max-width:1040px;margin:0 auto;padding:32px 40px 72px;}
+.mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:8px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);gap:16px;flex-wrap:wrap;}
+.mast .k{color:var(--ink);}
+.mast b{color:var(--accent);}
+h1{font-size:clamp(30px,4.6vw,50px);line-height:1.04;letter-spacing:-.02em;font-weight:900;margin:26px 0 14px;max-width:15ch;}
+.lede{font-size:19px;max-width:60ch;color:var(--ink);margin:0 0 6px;}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:40px;margin-top:30px;}
+@media(max-width:760px){.grid{grid-template-columns:1fr;gap:28px;}.wrap{padding:24px 22px 56px;}}
+.kick{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 10px;font-weight:600;}
+.step{display:grid;grid-template-columns:64px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--hair);}
+.step:first-of-type{border-top:2px solid var(--ink);}
+.num{font-family:"Archivo",sans-serif;font-weight:900;font-size:44px;line-height:.9;color:var(--accent);letter-spacing:-.03em;}
+.step h3{margin:0 0 4px;font-size:18px;}
+.step p{margin:0;color:var(--muted);font-size:15px;}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;}
+.cmd{display:block;background:var(--ink);color:var(--paper);font-family:"IBM Plex Mono",monospace;font-size:14px;padding:12px 14px;margin:8px 0 2px;overflow-x:auto;white-space:nowrap;}
+a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:4px solid var(--accent);}
+.rail .box{background:var(--panel);border:1px solid var(--hair);padding:18px;margin-bottom:20px;}
+.rail .box.stat{background:var(--card);}
+.stat .big{font-family:"Archivo";font-weight:900;font-size:34px;letter-spacing:-.02em;line-height:1;}
+.stat .lbl{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.rail dl{margin:0;font-size:14px;}
+.rail dt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+.rail dd{margin:2px 0 0;}
+table{width:100%;border-collapse:collapse;margin:6px 0 4px;font-size:14px;}
+caption{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);padding-bottom:8px;font-weight:600;}
+th{background:var(--ink);color:var(--paper);text-align:left;padding:9px 12px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;}
+td{border-bottom:1px solid var(--hair);padding:10px 12px;vertical-align:top;}
+td.verb{font-family:"IBM Plex Mono",monospace;font-weight:700;color:var(--accent);white-space:nowrap;}
+.matrix{border:1px solid var(--hair);padding:20px;margin:8px 0 2px;background:var(--card);box-shadow:6px 6px 0 var(--ink);}
+.limit{border-left:3px solid var(--accent);padding:4px 0 4px 16px;margin:24px 0 0;font-size:15px;color:var(--ink);}
+.limit b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:4px;}
+footer{margin-top:44px;border-top:2px solid var(--ink);padding-top:12px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);}
+footer a{border-bottom-width:2px;}
+@media print{body{background:#fff;}.matrix{box-shadow:none;}.wrap{padding:0;}}
+</style></head>
+<body><div class="wrap">
+<div class="mast"><span class="k">Comment <b>&ldquo;HALLMARK&rdquo;</b> &middot; Delivered</span><span>NextPhase &middot; Field Guide No.06</span></div>
+
+<h1>Install Hallmark once and your AI-built UIs stop looking AI-built</h1>
+<p class="lede">Hallmark is a free, MIT-licensed design skill &mdash; a rule-set your agent reads, not an app you run. It forces the agent off the default layout every model reaches for, dresses the page in one of twenty themes, then runs the output through a 57-gate slop test before it hands you anything.</p>
+
+<div class="grid">
+<main>
+<p class="kick">Install &mdash; one command</p>
+<div class="step"><div class="num">1</div><div><h3>Add the skill to your agent</h3><p>Works in Claude Code, Cursor, or Codex. Run this in your project (or globally) and the skill file installs itself.</p><code class="cmd">npx skills add nutlope/hallmark</code><p>Manual alternative: copy <span class="mono">SKILL.md</span> + <span class="mono">references/</span> into <span class="mono">~/.claude/skills/hallmark/</span>, <span class="mono">.cursor/rules/hallmark.mdc</span>, or <span class="mono">~/.codex/skills/hallmark/</span>.</p></div></div>
+<div class="step"><div class="num">2</div><div><h3>Confirm the agent picked it up</h3><p>Start a new session and ask for a UI. You&rsquo;ll know it worked when the agent narrates a macrostructure choice and a named theme instead of jumping straight to a centered hero and three icon cards.</p></div></div>
+<div class="step"><div class="num">3</div><div><h3>Call a verb</h3><p>Default behaviour is <b>build</b>. The other three are named below &mdash; type the verb plus a target.</p></div></div>
+
+<p class="kick" style="margin-top:26px">The four verbs &mdash; centerpiece</p>
+<div class="matrix">
+<table><caption>What each verb does &middot; as of 2026-07-20</caption>
+<thead><tr><th>Verb</th><th>What it does</th><th>Touches your copy?</th></tr></thead>
+<tbody>
+<tr><td class="verb">build</td><td>Default. Generates a new UI off a non-default page structure + one of 20 themes.</td><td>Writes new</td></tr>
+<tr><td class="verb">audit</td><td>Scores an existing page against the 57 gates. Reports only &mdash; makes no edits.</td><td>No</td></tr>
+<tr><td class="verb">redesign</td><td>Rebuilds a page&rsquo;s look while keeping its copy, information architecture, and brand.</td><td>Keeps yours</td></tr>
+<tr><td class="verb">study &lt;screenshot&#124;URL&gt;</td><td>Extracts the &ldquo;design DNA&rdquo; of a reference so you can reuse the vibe, not the pixels.</td><td>No</td></tr>
+</tbody></table>
+</div>
+
+<p class="limit"><b>One honest limitation</b>Hallmark only shapes those three agents &mdash; it is a rule-set, not a standalone app, so it does nothing in Figma, v0, or a raw ChatGPT window. And <span class="mono">study</span> deliberately refuses to pixel-clone a site or copy a paid template; it pulls principles, not a 1:1 rip.</p>
+</main>
+
+<aside class="rail">
+<div class="box stat"><div class="big">12.3k&#8239;&#9733;</div><div class="lbl">GitHub stars &middot; 612 forks &middot; as of 2026-07-20</div></div>
+<div class="box"><dl>
+<dt>Repo</dt><dd><a href="https://github.com/nutlope/hallmark">github.com/nutlope/hallmark</a></dd>
+<dt>License</dt><dd>MIT &mdash; free, commercial-OK</dd>
+<dt>Maker</dt><dd>Together AI (Nutlope / Hassan El Mghari)</dd>
+<dt>Output</dt><dd>Self-contained HTML + CSS</dd>
+<dt>The gate</dt><dd>20 themes &middot; 4 verbs &middot; 57 slop-test checks + a self-critique pass</dd>
+</dl></div>
+<div class="box"><dl>
+<dt>What &ldquo;slop&rdquo; means</dt><dd>The generic AI look: centered everything, three icon cards, purple-blue gradients, rounded-2xl + soft shadow on every box. The gates flag these before you see the output.</dd>
+</dl></div>
+</aside>
+</div>
+
+<footer>NextPhase &middot; build in public, keep what you ship. &nbsp;Sources: <a href="https://github.com/nutlope/hallmark">github.com/nutlope/hallmark</a> &middot; 2026-07-20 &middot; free to share.</footer>
+</div></body></html>
