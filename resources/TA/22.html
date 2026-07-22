@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An AI character stays consistent when you lock its identity once and QA every frame</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+  --muted:#6E655A; --hair:#E2DACC; --accent:#F14A00;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:'Archivo','Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.55}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1100px;margin:0 auto;padding:0 36px}
+a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:3px solid var(--accent)}
+a:hover{background:var(--accent);color:var(--paper)}
+
+.masthead{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:20px 0 14px;border-bottom:3px solid var(--ink)}
+.masthead .tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase}
+.masthead .tag b{color:var(--accent);font-weight:600}
+.masthead .handle{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--muted)}
+
+.hero{padding:44px 0 34px;border-bottom:1px solid var(--hair)}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.kicker::before{content:"";display:inline-block;width:22px;height:8px;background:var(--accent);margin-right:10px;vertical-align:baseline}
+h1{font-weight:900;font-size:clamp(31px,4.4vw,50px);line-height:1.06;letter-spacing:-.022em;max-width:21em}
+.dek{margin-top:18px;max-width:46em;font-size:17.5px;color:var(--muted);font-weight:500}
+.dek b{color:var(--ink)}
+
+.cols{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:56px;padding:44px 0}
+@media (max-width:880px){.cols{grid-template-columns:1fr;gap:40px}}
+
+section{margin-bottom:46px}
+h2{font-weight:800;font-size:23px;letter-spacing:-.015em;margin-bottom:12px}
+p{margin-bottom:12px;max-width:64ch}
+.note{font-size:14px;color:var(--muted)}
+
+.checklist{border:2px solid var(--ink);background:var(--card);box-shadow:9px 9px 0 var(--ink);margin:22px 0 12px}
+.cl-phase{padding:18px 24px 8px;border-top:1px solid var(--hair)}
+.cl-phase:first-child{border-top:none}
+.cl-head{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+.cl-num{font-weight:900;font-size:42px;line-height:1;color:var(--accent);letter-spacing:-.03em}
+.cl-head h3{font-weight:800;font-size:17px}
+.cl-head .when{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-left:auto;white-space:nowrap}
+.cl-item{display:grid;grid-template-columns:20px 1fr;gap:12px;padding:8px 0 8px 4px;border-top:1px dashed var(--hair);font-size:14.5px}
+.cl-item::before{content:"";width:14px;height:14px;border:2px solid var(--ink);margin-top:3px}
+.cl-item b{font-weight:700}
+.cl-item span{color:var(--muted)}
+.cl-phase.req{background:var(--panel)}
+.cl-phase.req .cl-num{color:var(--ink)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:14px 0 6px}
+th{background:var(--ink);color:var(--paper);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:9px 12px}
+td{padding:8px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.k{font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:nowrap;color:var(--muted)}
+td.v{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-variant-numeric:tabular-nums}
+
+.rail{border-left:1px solid var(--hair);padding-left:32px}
+@media (max-width:880px){.rail{border-left:none;padding-left:0}}
+.railblock{margin-bottom:34px}
+.railblock .kicker{margin-bottom:12px}
+.fact{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:13.5px}
+.fact b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.fact span{color:var(--muted)}
+.limit{background:var(--panel);border-top:3px solid var(--accent);padding:18px 20px;font-size:14px}
+.limit .kicker{color:var(--accent);margin-bottom:8px}
+.limit p{font-size:14px;margin-bottom:8px;max-width:none}
+.limit p:last-child{margin-bottom:0}
+.unv{margin-top:8px}
+.unv .fact b{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--accent);text-decoration-thickness:2px}
+
+.footer{border-top:3px solid var(--ink);margin-top:10px;padding:18px 0 46px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.footer .brand{font-weight:800;font-size:14px}
+.footer .src{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em;max-width:48em;text-align:right}
+@media (max-width:880px){.footer .src{text-align:left}}
+
+@media print{
+  body{background:#fff}
+  .checklist{box-shadow:6px 6px 0 var(--ink)}
+  .cols{grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:36px}
+  a{border-bottom-width:2px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="tag">COMMENT <b>&ldquo;PERSONA&rdquo;</b> &middot; DELIVERED</div>
+  <div class="handle">@promptadvisers</div>
+</header>
+
+<div class="hero">
+  <div class="kicker">AI Persona Realism &middot; Free Resource &middot; 2026-07-22</div>
+  <h1>An AI character stays consistent when you lock its identity once and QA every frame.</h1>
+  <p class="dek">The realism checklist from the video — 18 checks in four passes. Micro&#8209;details are what kill the &ldquo;this looks AI&rdquo; reaction, and every one of them is decided <b>before</b> you batch a single clip.</p>
+</div>
+
+<div class="cols">
+<main>
+
+  <section>
+    <div class="checklist">
+
+      <div class="cl-phase">
+        <div class="cl-head"><div class="cl-num">A</div><h3>Identity lock</h3><div class="when">do once, before clip 1</div></div>
+        <div class="cl-item"><b>Master reference set.</b> <span>Generate one canonical face in 5–8 fixed angles (front, 3/4 left, 3/4 right, profile, smile, neutral). Every future generation conditions on these — never on a previous output, or drift compounds.</span></div>
+        <div class="cl-item"><b>Written face spec.</b> <span>Note the measurable stuff in plain words: eye color (hex if your tool takes it), eyebrow shape, nose bridge width, jawline, teeth (one slightly crooked beats perfect), face shape.</span></div>
+        <div class="cl-item"><b>Two permanent marks.</b> <span>Pick exactly two — a mole, a freckle cluster, a faint scar — and write down their positions. Marks are your fastest drift detector later.</span></div>
+        <div class="cl-item"><b>Fixed hair spec.</b> <span>Color, length, texture, and which side the part falls on. Parts silently flip between generations; the spec is what catches it.</span></div>
+        <div class="cl-item"><b>Skin texture floor.</b> <span>Visible pores, fine vellus hair, slight under&#8209;eye unevenness. Plastic&#8209;smooth skin is the single loudest AI tell.</span></div>
+        <div class="cl-item"><b>Wardrobe kit.</b> <span>3–5 named outfits with specific details (buttons, seams, jewelry). Reuse the kit; never let the model improvise clothing mid&#8209;series.</span></div>
+      </div>
+
+      <div class="cl-phase">
+        <div class="cl-head"><div class="cl-num">B</div><h3>Frame checks</h3><div class="when">every clip, before it renders into the batch</div></div>
+        <div class="cl-item"><b>One light source, one story.</b> <span>Key light comes from a single stated direction per scene; shadows on face, neck, and background must all agree with it.</span></div>
+        <div class="cl-item"><b>Catchlights match.</b> <span>The reflection in both eyes sits at the same clock position and matches the stated light source. Dead or mismatched eyes read as fake instantly.</span></div>
+        <div class="cl-item"><b>Reflections obey the room.</b> <span>Glasses, jewelry, phone screens, and windows reflect the environment you claimed — not a studio void.</span></div>
+        <div class="cl-item"><b>Micro&#8209;expression pass.</b> <span>Blinks, slight facial asymmetry, small mouth movements between words. Symmetrical, frozen faces are the second&#8209;loudest tell after skin.</span></div>
+        <div class="cl-item"><b>Hands and teeth count.</b> <span>Five fingers, plausible knuckles, consistent teeth across smiles. Still the classic per&#8209;frame failure points, even in 2026&#8209;era generators.</span></div>
+        <div class="cl-item"><b>Continuity within the clip.</b> <span>Same earrings, same shirt wrinkles, same hair part at second 1 and second 8.</span></div>
+      </div>
+
+      <div class="cl-phase">
+        <div class="cl-head"><div class="cl-num">C</div><h3>Batch QA</h3><div class="when">after each batch, before anything posts</div></div>
+        <div class="cl-item"><b>Line&#8209;up test.</b> <span>Put one frame from every clip side by side against the master reference set. Same person in all of them, at a glance?</span></div>
+        <div class="cl-item"><b>Mark check.</b> <span>Are both permanent marks present, in position, in every clip? A migrated mole means the clip regenerates.</span></div>
+        <div class="cl-item"><b>Kill, don&rsquo;t patch.</b> <span>A drifted clip gets regenerated from the master references, never &ldquo;fixed&rdquo; downstream — edits on top of drift read as uncanny.</span></div>
+        <div class="cl-item"><b>Log the seeds.</b> <span>Whatever settings, prompts, or seeds produced on&#8209;model results — write them down. Consistency is a filing habit as much as a craft skill.</span></div>
+      </div>
+
+      <div class="cl-phase req">
+        <div class="cl-head"><div class="cl-num">D</div><h3>Disclosure</h3><div class="when">non&#8209;negotiable, every platform</div></div>
+        <div class="cl-item"><b>Label the character as AI.</b> <span>Platforms require it. Fanvue puts every AI upload through a three&#8209;moderator review and bans undisclosed AI on its public discovery and profile surfaces (per its published policy, as of 2026&#8209;07&#8209;21).</span></div>
+        <div class="cl-item"><b>Disclosure is not the reach killer.</b> <span>Disclosed AI creators already account for roughly 15% of Fanvue&rsquo;s revenue (Forbes, Jan 2026). The checklist above is about craft quality — not about passing the character off as human.</span></div>
+      </div>
+
+    </div>
+    <p class="note">18 checks. Phases A and C are where consistency is actually won; phase B is where realism is won; phase D is what keeps the account alive.</p>
+  </section>
+
+  <section>
+    <h2>Worked example — a filled identity lock</h2>
+    <p>What phase A looks like written down. Copy the shape, change every value:</p>
+    <table>
+      <tr><th>Field</th><th>Locked value</th></tr>
+      <tr><td class="k">references</td><td class="v">8 canonical images: front / 3-4L / 3-4R / profile / smile / neutral / seated / outdoor</td></tr>
+      <tr><td class="k">eyes</td><td class="v">dark brown #4A3527, slight left-eye narrowing on smile</td></tr>
+      <tr><td class="k">marks</td><td class="v">mole: left cheekbone, 1 cm below outer eye corner &middot; freckles: bridge of nose, faint</td></tr>
+      <tr><td class="k">hair</td><td class="v">black, collarbone length, slight wave, part on RIGHT</td></tr>
+      <tr><td class="k">skin</td><td class="v">visible pores on nose + forehead, no blur, faint under-eye shadow</td></tr>
+      <tr><td class="k">teeth</td><td class="v">upper-left lateral incisor slightly rotated — appears in every smile</td></tr>
+      <tr><td class="k">wardrobe</td><td class="v">kit of 4: grey ribbed knit / white linen shirt / black blazer / green hoodie; gold stud earrings always</td></tr>
+      <tr><td class="k">disclosure</td><td class="v">bio + platform AI label on every account, day one</td></tr>
+    </table>
+    <p class="note">The rotated incisor and the two marks do the heavy lifting — imperfections are the cheapest consistency anchors you can buy.</p>
+  </section>
+
+  <section>
+    <h2>The claim that sent you here, priced honestly</h2>
+    <p>The viral thread behind this video claims one creator nets $84,000 a month from a fake AI influencer. Every income figure in that thread — the $84k/mo, the $539k total, 20M views a week, 2,619 subscribers, $8k shoutouts — is self&#8209;reported and unverified. What <em>is</em> documented: Fanvue raised $22M in January 2026, says AI creators make up about 15% of its revenue, pays creators 80% of gross, and hosts AI subscriptions mostly priced $4.99–$14.99 a month. Run the arithmetic on those verified numbers and the honest read is a real but crowded income mechanism with no guaranteed payout.</p>
+  </section>
+
+</main>
+
+<aside class="rail">
+  <div class="railblock">
+    <div class="kicker">Verified numbers &middot; the platform side</div>
+    <div class="fact"><span>Fanvue raise, Jan 2026</span><b>$22M</b></div>
+    <div class="fact"><span>Revenue from AI creators</span><b>~15%</b></div>
+    <div class="fact"><span>Creators using its AI tools</span><b>93%</b></div>
+    <div class="fact"><span>Creator keeps</span><b>80% of gross</b></div>
+    <div class="fact"><span>Sub tiers allowed</span><b>$3.99–$100/mo</b></div>
+    <div class="fact"><span>AI subs usually priced</span><b>$4.99–$14.99</b></div>
+    <p class="note" style="margin-top:10px">Raise + revenue share: Forbes, 2026&#8209;01&#8209;16. Payout split + tiers: Fanvue&rsquo;s published creator&#8209;earnings terms, fetched 2026&#8209;07&#8209;21.</p>
+  </div>
+
+  <div class="railblock">
+    <div class="kicker">Unverified &middot; treat as marketing</div>
+    <div class="unv">
+      <div class="fact"><span>&ldquo;Monthly net&rdquo;</span><b>$84,000</b></div>
+      <div class="fact"><span>&ldquo;Total earned&rdquo;</span><b>$539,000</b></div>
+      <div class="fact"><span>&ldquo;Weekly views&rdquo;</span><b>20,000,000</b></div>
+      <div class="fact"><span>&ldquo;Subscribers&rdquo;</span><b>2,619</b></div>
+      <div class="fact"><span>&ldquo;Per shoutout&rdquo;</span><b>$8,000</b></div>
+    </div>
+    <p class="note" style="margin-top:10px">All five come from one viral thread&rsquo;s own screenshots. None are independently confirmed.</p>
+  </div>
+
+  <div class="railblock limit">
+    <div class="kicker">The honest catch</div>
+    <p>Even with all 18 checks, frame&#8209;to&#8209;frame photorealism is hard — drift still happens, and the fix is regeneration plus QA, not a magic prompt. Budget for throwing clips away.</p>
+    <p>The platform also takes ~20% of everything, requires AI disclosure, and moderates each upload. Nothing on this page is a promise of income.</p>
+  </div>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="brand">Prompt Advisers</div>
+  <div class="src">Sources: forbes.com (Fanvue raise, 2026-01-16) &middot; legal.fanvue.com/creator-earnings-payouts &middot; fanvue.com/blog/what-is-fanvue &middot; x.com/kovall_web3 (unverified claims) &middot; fetched 2026-07-21 &middot; free to share</div>
+</footer>
+
+</div>
+</body>
+</html>
