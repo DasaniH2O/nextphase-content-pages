@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your first full-site SEO audit is three commands away</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+  --muted:#6E655A; --hair:#E2DACC; --accent:#F14A00;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:'Archivo','Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.55}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1100px;margin:0 auto;padding:0 36px}
+a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:3px solid var(--accent)}
+a:hover{background:var(--accent);color:var(--paper)}
+
+.masthead{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:20px 0 14px;border-bottom:3px solid var(--ink)}
+.masthead .tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase}
+.masthead .tag b{color:var(--accent);font-weight:600}
+.masthead .handle{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--muted)}
+
+.hero{padding:44px 0 34px;border-bottom:1px solid var(--hair)}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.kicker::before{content:"";display:inline-block;width:22px;height:8px;background:var(--accent);margin-right:10px;vertical-align:baseline}
+h1{font-weight:900;font-size:clamp(32px,4.6vw,52px);line-height:1.05;letter-spacing:-.022em;max-width:19em}
+.dek{margin-top:18px;max-width:44em;font-size:17.5px;color:var(--muted);font-weight:500}
+.dek b{color:var(--ink)}
+
+.cols{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:56px;padding:44px 0}
+@media (max-width:880px){.cols{grid-template-columns:1fr;gap:40px}}
+
+section{margin-bottom:44px}
+h2{font-weight:800;font-size:23px;letter-spacing:-.015em;margin-bottom:10px}
+p{margin-bottom:12px;max-width:62ch}
+.note{font-size:14px;color:var(--muted)}
+
+.step{display:grid;grid-template-columns:74px 1fr;gap:18px;padding:22px 0;border-top:1px solid var(--hair)}
+.step:first-of-type{border-top:none}
+.stepnum{font-weight:900;font-size:58px;line-height:.9;color:var(--accent);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.step h3{font-weight:800;font-size:18px;margin-bottom:8px}
+.step p{font-size:15.5px;margin-bottom:10px}
+
+pre{font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.7;background:var(--ink);color:var(--paper);padding:16px 18px;overflow-x:auto;margin:10px 0 6px}
+pre .c{color:#B8AE9E}
+code{font-family:'IBM Plex Mono',monospace;font-size:.92em;background:var(--panel);padding:1px 5px;border:1px solid var(--hair)}
+pre code{background:none;border:none;padding:0}
+
+.featured{background:var(--card);border:2px solid var(--ink);box-shadow:9px 9px 0 var(--ink);padding:26px 28px;margin:26px 0 34px}
+.featured .kicker{margin-bottom:10px}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0 6px}
+th{background:var(--ink);color:var(--paper);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:9px 12px}
+td{padding:9px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.cmd{font-family:'IBM Plex Mono',monospace;font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.pipeline{margin:18px 0 8px}
+.pl-stage{border:1.5px solid var(--ink);background:var(--card);padding:13px 16px;position:relative}
+.pl-stage+.pl-stage{margin-top:26px}
+.pl-stage+.pl-stage::before{content:"";position:absolute;top:-27px;left:38px;width:2px;height:26px;background:var(--ink)}
+.pl-stage+.pl-stage::after{content:"";position:absolute;top:-8px;left:33px;border:6px solid transparent;border-top-color:var(--ink)}
+.pl-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:3px}
+.pl-stage h4{font-weight:800;font-size:15.5px;margin-bottom:2px}
+.pl-stage p{font-size:13.5px;color:var(--muted);margin:0;max-width:none}
+.pl-fan{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.pl-agent{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;border:1px solid var(--hair);background:var(--panel);padding:5px 7px;text-align:center}
+.pl-agent.on{border-color:var(--accent);background:#FDEDE4}
+@media (max-width:620px){.pl-fan{grid-template-columns:repeat(2,1fr)}}
+
+.rail{border-left:1px solid var(--hair);padding-left:32px}
+@media (max-width:880px){.rail{border-left:none;padding-left:0}}
+.railblock{margin-bottom:34px}
+.railblock .kicker{margin-bottom:12px}
+.fact{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:13.5px}
+.fact b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.fact span{color:var(--muted)}
+.limit{background:var(--panel);border-top:3px solid var(--accent);padding:18px 20px;font-size:14px}
+.limit .kicker{color:var(--accent);margin-bottom:8px}
+.limit p{font-size:14px;margin-bottom:8px;max-width:none}
+.limit p:last-child{margin-bottom:0}
+
+.footer{border-top:3px solid var(--ink);margin-top:10px;padding:18px 0 46px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.footer .brand{font-weight:800;font-size:14px}
+.footer .src{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em;max-width:46em;text-align:right}
+@media (max-width:880px){.footer .src{text-align:left}}
+
+@media print{
+  body{background:#fff}
+  .featured{box-shadow:6px 6px 0 var(--ink)}
+  .cols{grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:36px}
+  a{border-bottom-width:2px}
+  pre{white-space:pre-wrap}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="tag">COMMENT <b>&ldquo;AUDIT&rdquo;</b> &middot; DELIVERED</div>
+  <div class="handle">@promptadvisers</div>
+</header>
+
+<div class="hero">
+  <div class="kicker">Claude&nbsp;SEO &middot; Free Resource &middot; 2026-07-22</div>
+  <h1>Your first full&#8209;site SEO audit is three commands away.</h1>
+  <p class="dek">The install command and the exact prompts for <b>claude-seo</b> — the MIT&#8209;licensed skill that turns Claude Code into a parallel SEO audit team. Everything below was verified against the repo on 2026&#8209;07&#8209;22.</p>
+</div>
+
+<div class="cols">
+<main>
+
+  <div class="featured">
+    <div class="kicker">The install &middot; copy&#8209;paste into Claude Code</div>
+    <pre><code><span class="c"># Inside Claude Code (v1.0.33 or newer) — three lines, run in order:</span>
+/plugin marketplace add AgriciDaniel/claude-seo
+/plugin install claude-seo@agricidaniel-claude-seo
+/seo setup</code></pre>
+    <p class="note"><code>/seo setup</code> creates an isolated Python environment and installs Playwright Chromium — nothing global touches your machine. Prefer a terminal install instead? <code>git clone --depth 1 https://github.com/AgriciDaniel/claude-seo.git</code> then <code>bash claude-seo/install.sh</code> (Windows: <code>powershell -ExecutionPolicy Bypass -File claude-seo\install.ps1</code>).</p>
+  </div>
+
+  <section>
+    <h2>The first-audit runbook</h2>
+
+    <div class="step">
+      <div class="stepnum">1</div>
+      <div>
+        <h3>Verify the install</h3>
+        <pre><code>/seo doctor</code></pre>
+        <p>You&rsquo;ll know it worked when <code>doctor</code> reports the Python runtime, dependencies, and Chromium as ready. It changes nothing on your system — it only checks.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="stepnum">2</div>
+      <div>
+        <h3>Run the full audit</h3>
+        <pre><code>/seo audit https://yoursite.com</code></pre>
+        <p>This is the headline prompt. It crawls up to 500 pages, detects your business type, then fans out up to 15 specialist subagents in parallel — 8 always&#8209;on plus 7 conditional. A typical run takes 10–15 minutes (per the repo&rsquo;s own benchmark) and consumes Claude usage while it works.</p>
+        <p>When it finishes you get a 0–100 SEO Health Score plus two files written locally: <code>FULL-AUDIT-REPORT.md</code> and <code>ACTION-PLAN.md</code> — the prioritized fix list, ranked by impact. Nothing is uploaded anywhere; reports stay on your machine.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="stepnum">3</div>
+      <div>
+        <h3>Drill into what the audit flags</h3>
+        <p>These are the follow&#8209;up prompts, verbatim from the command reference — swap in the URLs your action plan points at:</p>
+        <table>
+          <tr><th>Prompt</th><th>What it digs into</th></tr>
+          <tr><td class="cmd">/seo page &lt;url&gt;</td><td>Deep single&#8209;page analysis: titles, headings, content quality, schema, images, Core Web Vitals risks</td></tr>
+          <tr><td class="cmd">/seo technical &lt;url&gt;</td><td>Technical audit across 9 categories — crawlability, indexability, security, mobile, LCP/INP/CLS</td></tr>
+          <tr><td class="cmd">/seo content &lt;url&gt;</td><td>E&#8209;E&#8209;A&#8209;T and content quality, scored against Google&rsquo;s Sept 2025 rater guidelines</td></tr>
+          <tr><td class="cmd">/seo schema &lt;url&gt;</td><td>Detects, validates, and generates Schema.org JSON&#8209;LD; flags deprecated types</td></tr>
+          <tr><td class="cmd">/seo geo &lt;url&gt;</td><td>The AI&#8209;search check: passage citability and whether ChatGPT&#8209;class engines can quote you</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="stepnum">4</div>
+      <div>
+        <h3>Worked example — a complete first session</h3>
+        <pre><code>/plugin marketplace add AgriciDaniel/claude-seo
+/plugin install claude-seo@agricidaniel-claude-seo
+/seo setup
+/seo doctor
+/seo audit https://example.com
+<span class="c"># …10–15 min later: Health Score 0–100, FULL-AUDIT-REPORT.md, ACTION-PLAN.md</span>
+/seo page https://example.com/pricing   <span class="c"># chase the worst finding first</span></code></pre>
+        <p class="note">Five commands, one drill&#8209;down. That is the whole first audit.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What actually runs when you type <span class="mono" style="font-size:.85em">/seo audit</span></h2>
+    <div class="pipeline">
+      <div class="pl-stage">
+        <div class="pl-label">Input</div>
+        <h4>/seo audit https://yoursite.com</h4>
+        <p>Crawls up to 500 pages &middot; detects business type</p>
+      </div>
+      <div class="pl-stage">
+        <div class="pl-label">Fan&#8209;out &middot; up to 15 subagents in parallel</div>
+        <h4>8 always&#8209;on + 7 conditional specialists</h4>
+        <div class="pl-fan">
+          <div class="pl-agent on">TECHNICAL</div>
+          <div class="pl-agent on">CONTENT / E-E-A-T</div>
+          <div class="pl-agent on">SCHEMA</div>
+          <div class="pl-agent on">GEO / AI SEARCH</div>
+          <div class="pl-agent">LOCAL</div>
+          <div class="pl-agent">E-COMMERCE</div>
+          <div class="pl-agent">INTERNATIONAL</div>
+          <div class="pl-agent">+ 8 MORE</div>
+        </div>
+      </div>
+      <div class="pl-stage">
+        <div class="pl-label">Output &middot; written to local files</div>
+        <h4>Health Score 0–100 &middot; FULL-AUDIT-REPORT.md &middot; ACTION-PLAN.md</h4>
+        <p>Prioritized fixes, each with a &ldquo;how would we know this failed?&rdquo; check</p>
+      </div>
+    </div>
+    <p class="note">Drawn from the repo&rsquo;s command reference (docs/COMMANDS.md), fetched 2026&#8209;07&#8209;22.</p>
+  </section>
+
+</main>
+
+<aside class="rail">
+  <div class="railblock">
+    <div class="kicker">Fact file &middot; as of 2026-07-22</div>
+    <div class="fact"><span>License / price</span><b>MIT &middot; $0</b></div>
+    <div class="fact"><span>GitHub stars</span><b>~11.9K</b></div>
+    <div class="fact"><span>Sub&#8209;skills</span><b>25</b></div>
+    <div class="fact"><span>Specialist agents</span><b>18</b></div>
+    <div class="fact"><span>Parallel per audit</span><b>up to 15</b></div>
+    <div class="fact"><span>Crawl ceiling</span><b>500 pages</b></div>
+    <div class="fact"><span>Typical audit</span><b>10–15 min</b></div>
+    <div class="fact"><span>/seo commands</span><b>32</b></div>
+    <div class="fact"><span>Optional extensions</span><b>8</b></div>
+    <p class="note" style="margin-top:10px">Star count as fetched 2026&#8209;07&#8209;21; the rest verified in&#8209;repo 2026&#8209;07&#8209;22.</p>
+  </div>
+
+  <div class="railblock">
+    <div class="kicker">Prerequisites</div>
+    <div class="fact"><span>Python</span><b>3.10+</b></div>
+    <div class="fact"><span>Claude Code CLI</span><b>1.0.33+</b></div>
+    <div class="fact"><span>Playwright Chromium</span><b>optional</b></div>
+    <div class="fact"><span>Google API keys</span><b>optional</b></div>
+    <p class="note" style="margin-top:10px">&ldquo;Skill&rdquo; here means an add&#8209;on instruction pack Claude Code loads and runs — you install it once, then call it with <code>/seo</code> commands. Each audit spends Claude usage from your plan.</p>
+  </div>
+
+  <div class="railblock limit">
+    <div class="kicker">The honest catch</div>
+    <p>The 0–100 Health Score is Claude&rsquo;s structured judgment — a model heuristic, not Google ranking data. Treat it as a consistent yardstick between runs, not an oracle.</p>
+    <p>Without Google API credentials, Core Web Vitals are lab estimates only; live rank, volume, and backlink data needs opt&#8209;in extensions (DataForSEO, Ahrefs) with their own accounts.</p>
+  </div>
+
+  <div class="railblock">
+    <div class="kicker">The links</div>
+    <p style="font-size:14px;margin-bottom:10px"><a href="https://github.com/AgriciDaniel/claude-seo">github.com/AgriciDaniel/claude-seo</a></p>
+    <p class="note">The repo — README, install scripts, and the full 32&#8209;command reference under <span class="mono">docs/COMMANDS.md</span>.</p>
+  </div>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="brand">Prompt Advisers</div>
+  <div class="src">Sources: github.com/AgriciDaniel/claude-seo (repo + docs/COMMANDS.md, fetched 2026-07-22) &middot; star count fetched 2026-07-21 &middot; free to share</div>
+</footer>
+
+</div>
+</body>
+</html>
