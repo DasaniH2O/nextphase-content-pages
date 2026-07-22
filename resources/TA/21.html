@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>He shipped a native iOS app in 33 days by critiquing Claude&rsquo;s output like a mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF8F2; --card:#FFFFFF; --panel:#F0EBE1; --ink:#1B160F;
+  --muted:#6E655A; --hair:#E2DACC; --accent:#F14A00;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:'Archivo','Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.55}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1100px;margin:0 auto;padding:0 36px}
+a{color:var(--ink);font-weight:700;text-decoration:none;border-bottom:3px solid var(--accent)}
+a:hover{background:var(--accent);color:var(--paper)}
+
+.masthead{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:20px 0 14px;border-bottom:3px solid var(--ink)}
+.masthead .tag{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase}
+.masthead .tag b{color:var(--accent);font-weight:600}
+.masthead .handle{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--muted)}
+
+.hero{padding:44px 0 34px;border-bottom:1px solid var(--hair)}
+.kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.kicker::before{content:"";display:inline-block;width:22px;height:8px;background:var(--accent);margin-right:10px;vertical-align:baseline}
+h1{font-weight:900;font-size:clamp(31px,4.4vw,50px);line-height:1.06;letter-spacing:-.022em;max-width:21em}
+.dek{margin-top:18px;max-width:46em;font-size:17.5px;color:var(--muted);font-weight:500}
+.dek b{color:var(--ink)}
+
+.cols{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:56px;padding:44px 0}
+@media (max-width:880px){.cols{grid-template-columns:1fr;gap:40px}}
+
+section{margin-bottom:46px}
+h2{font-weight:800;font-size:23px;letter-spacing:-.015em;margin-bottom:12px}
+p{margin-bottom:12px;max-width:64ch}
+.note{font-size:14px;color:var(--muted)}
+
+.loop{border:2px solid var(--ink);background:var(--card);box-shadow:9px 9px 0 var(--ink);padding:26px 28px;margin:22px 0 12px}
+.loop .kicker{margin-bottom:16px}
+.lstep{display:grid;grid-template-columns:64px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--hair);position:relative}
+.lstep:first-of-type{border-top:none;padding-top:0}
+.lnum{font-weight:900;font-size:46px;line-height:1;color:var(--accent);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.lstep h3{font-weight:800;font-size:16.5px;margin-bottom:4px}
+.lstep p{font-size:14.5px;margin-bottom:6px;max-width:none}
+.lstep .q{font-family:'IBM Plex Mono',monospace;font-size:13px;background:var(--panel);border-left:3px solid var(--accent);padding:8px 12px;margin-top:6px}
+.loopback{margin-top:14px;padding-top:12px;border-top:2px solid var(--ink);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600}
+
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0 6px}
+th{background:var(--ink);color:var(--paper);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-align:left;padding:9px 12px}
+td{padding:9px 12px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.crit{font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+
+pre{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.7;background:var(--ink);color:var(--paper);padding:16px 18px;overflow-x:auto;margin:10px 0 6px;white-space:pre-wrap}
+code{font-family:'IBM Plex Mono',monospace;font-size:.92em;background:var(--panel);padding:1px 5px;border:1px solid var(--hair)}
+pre code{background:none;border:none;padding:0}
+
+.rail{border-left:1px solid var(--hair);padding-left:32px}
+@media (max-width:880px){.rail{border-left:none;padding-left:0}}
+.railblock{margin-bottom:34px}
+.railblock .kicker{margin-bottom:12px}
+.fact{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--hair);font-size:13.5px}
+.fact b{font-family:'IBM Plex Mono',monospace;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.fact span{color:var(--muted)}
+.tagchip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--hair);color:var(--muted);padding:1px 5px;margin-left:6px;vertical-align:middle}
+.tagchip.v{border-color:var(--accent);color:var(--accent)}
+.limit{background:var(--panel);border-top:3px solid var(--accent);padding:18px 20px;font-size:14px}
+.limit .kicker{color:var(--accent);margin-bottom:8px}
+.limit p{font-size:14px;margin-bottom:8px;max-width:none}
+.limit p:last-child{margin-bottom:0}
+
+.footer{border-top:3px solid var(--ink);margin-top:10px;padding:18px 0 46px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.footer .brand{font-weight:800;font-size:14px}
+.footer .src{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.04em;max-width:48em;text-align:right}
+@media (max-width:880px){.footer .src{text-align:left}}
+
+@media print{
+  body{background:#fff}
+  .loop{box-shadow:6px 6px 0 var(--ink)}
+  .cols{grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:36px}
+  a{border-bottom-width:2px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="tag">COMMENT <b>&ldquo;SHIP&rdquo;</b> &middot; DELIVERED</div>
+  <div class="handle">@promptadvisers</div>
+</header>
+
+<div class="hero">
+  <div class="kicker">The Savee 3.0 Build &middot; Free Resource &middot; 2026-07-22</div>
+  <h1>He shipped a native iOS app in 33&nbsp;days by critiquing Claude&rsquo;s output like a mockup.</h1>
+  <p class="dek">The full breakdown of Andre do Amaral&rsquo;s designer&#8209;feedback workflow — the loop he says carried <b>Savee&nbsp;3.0</b> through 1,078 prompts to the App&nbsp;Store, plus a starter prompt so you can run the same loop on your own build today.</p>
+</div>
+
+<div class="cols">
+<main>
+
+  <section>
+    <h2>The workflow, broken down</h2>
+    <p>Savee 3.0 is a from&#8209;scratch native SwiftUI rebuild of the design&#8209;inspiration platform Savee — live on the App Store now, requiring iOS&nbsp;17.0+. By his own account, do Amaral ran 1,078 prompts over 33 days, and Claude Code wrote the Swift. The part worth copying is <em>what he did instead of reviewing code</em>: he treated every build like a design review and gave feedback in critique language, the way he would mark up a junior designer&rsquo;s mockup.</p>
+
+    <div class="loop">
+      <div class="kicker">The designer&#8209;feedback loop &middot; one cycle</div>
+
+      <div class="lstep">
+        <div class="lnum">1</div>
+        <div>
+          <h3>Describe the screen, not the architecture</h3>
+          <p>Prompt Claude Code with what the screen should look like and do. Claude writes the SwiftUI; judging it happens on the screen, not in the diff.</p>
+        </div>
+      </div>
+
+      <div class="lstep">
+        <div class="lnum">2</div>
+        <div>
+          <h3>Build and look — on the actual device</h3>
+          <p>Run the app and judge it with designer&rsquo;s eyes: spacing, hierarchy, motion, tint. The screen is the code review.</p>
+        </div>
+      </div>
+
+      <div class="lstep">
+        <div class="lnum">3</div>
+        <div>
+          <h3>Critique in design language, verbatim</h3>
+          <p>His actual feedback style, quoted from his own account of the build:</p>
+          <div class="q">&ldquo;Move that two points left.&rdquo;<br>&ldquo;Lighter tint.&rdquo;<br>&ldquo;That corner radius is wrong.&rdquo;</div>
+        </div>
+      </div>
+
+      <div class="lstep">
+        <div class="lnum">4</div>
+        <div>
+          <h3>Claude translates taste into SwiftUI</h3>
+          <p>A &ldquo;point&rdquo; is SwiftUI&rsquo;s actual layout unit, so critique like &ldquo;two points left&rdquo; maps directly onto padding, offsets, tint values, and corner radii. The critique <em>is</em> the spec.</p>
+        </div>
+      </div>
+
+      <div class="lstep">
+        <div class="lnum">5</div>
+        <div>
+          <h3>Repeat until it ships</h3>
+          <p>1,078 prompts over 33 days by his count — roughly 33 cycles a day — then three App&nbsp;Store releases in week one.</p>
+        </div>
+      </div>
+
+      <div class="loopback">&#8617;&nbsp; back to 1 — every cycle ends in a new build to look at</div>
+    </div>
+    <p class="note">Steps and quotes from do Amaral&rsquo;s public account of the build (X thread, fetched 2026&#8209;07&#8209;21); the 33&#8209;day and prompt counts are his own numbers, not independently verified.</p>
+  </section>
+
+  <section>
+    <h2>The critique&#8209;to&#8209;SwiftUI phrasebook</h2>
+    <p>The three quoted critiques above are his. The rows below extend the same vocabulary so you can run the loop without knowing Swift — each phrase is concrete enough for Claude Code to act on without a follow&#8209;up question.</p>
+    <table>
+      <tr><th>Say this</th><th>What Claude changes</th></tr>
+      <tr><td class="crit">&ldquo;Move that two points left&rdquo;</td><td>Layout position — padding, offset, alignment values</td></tr>
+      <tr><td class="crit">&ldquo;Lighter tint&rdquo;</td><td>Color — opacity, tint shade, contrast against background</td></tr>
+      <tr><td class="crit">&ldquo;That corner radius is wrong — try 12&rdquo;</td><td>Shape — corner radius on cards, buttons, thumbnails</td></tr>
+      <tr><td class="crit">&ldquo;Double the spacing between these rows&rdquo;</td><td>Vertical rhythm — stack and list spacing values</td></tr>
+      <tr><td class="crit">&ldquo;This animation should settle faster&rdquo;</td><td>Motion — spring response and damping parameters</td></tr>
+      <tr><td class="crit">&ldquo;The title is shouting — one size down, keep the weight&rdquo;</td><td>Type scale — font size and weight tokens</td></tr>
+      <tr><td class="crit">&ldquo;Tappable area feels tiny — expand the hit target, not the icon&rdquo;</td><td>Interaction — content shape and padding, icon untouched</td></tr>
+    </table>
+    <p class="note">Rows 4–7 are our extensions of his method, not his quotes.</p>
+  </section>
+
+  <section>
+    <h2>Run the loop yourself — starter prompt</h2>
+    <p>Paste this into Claude Code inside your Xcode project to set the working contract. Claude works officially inside Xcode now, so the whole loop stays native Swift end to end.</p>
+    <pre><code>You are building [SCREEN] of my iOS app in SwiftUI.
+I am a designer, not an engineer. Our working contract:
+
+1. I describe screens; you write and run the Swift. Do not ask me
+   to review code — I review the running screen.
+2. I give feedback as design critique: points, tints, radii,
+   spacing, type sizes, motion. Apply it directly. "Two points
+   left" means exactly that.
+3. If my critique is ambiguous, show me two variants side by side
+   rather than asking a technical question.
+4. Keep every change buildable. If something I ask for fights the
+   platform (safe areas, dynamic type, accessibility), say so in
+   one plain sentence and propose the native-feeling alternative.
+
+First screen: [describe layout, content, and the feeling it
+should have — reference an app whose feel you want to match].</code></pre>
+    <p class="note">Worked example, filled in: &ldquo;First screen: a full&#8209;bleed image grid, two columns, 2&#8209;point gutters, infinite scroll. Tapping a tile opens it full screen with a spring. The feel: calm and dense, like a moodboard wall.&rdquo;</p>
+  </section>
+
+  <section>
+    <h2>Why the loop held for 33 days</h2>
+    <p>Two conditions did real work here, and both are worth engineering into your own attempt. First, taste with authority: one person could look at a screen and rule instantly, with no committee round&#8209;trip between critique and change. Second, a spec that already existed: do Amaral is Savee&rsquo;s own designer&#8209;founder rebuilding a product he had lived in for years — the requirements were in his head, so every prompt carried real product knowledge. If you have neither, expect the loop to run slower — budget the first days for writing down what each screen must do before you critique pixels.</p>
+  </section>
+
+</main>
+
+<aside class="rail">
+  <div class="railblock">
+    <div class="kicker">The build, by the numbers</div>
+    <div class="fact"><span>Days to App Store<span class="tagchip">self-rep.</span></span><b>33</b></div>
+    <div class="fact"><span>Prompts run<span class="tagchip">self-rep.</span></span><b>1,078</b></div>
+    <div class="fact"><span>Releases, week one<span class="tagchip">self-rep.</span></span><b>3</b></div>
+    <div class="fact"><span>App Store status<span class="tagchip v">verified</span></span><b>live</b></div>
+    <div class="fact"><span>Requires<span class="tagchip v">verified</span></span><b>iOS 17.0+</b></div>
+    <div class="fact"><span>New in 3.0<span class="tagchip v">verified</span></span><b>widget + save ext.</b></div>
+    <p class="note" style="margin-top:10px">&ldquo;Verified&rdquo; = confirmed on the App Store listing, 2026&#8209;07&#8209;21. &ldquo;Self&#8209;rep.&rdquo; = his own numbers from the X thread, not independently checkable.</p>
+  </div>
+
+  <div class="railblock">
+    <div class="kicker">See it live</div>
+    <p style="font-size:14px;margin-bottom:10px"><a href="https://apps.apple.com/us/app/savee/id1375238218">Savee on the App Store</a></p>
+    <p class="note">The shipped artifact itself — the one part of this story you can hold in your hand today. New home&#8209;screen widget plus an improved Save extension for Instagram and browsers.</p>
+  </div>
+
+  <div class="railblock limit">
+    <div class="kicker">The honest catch</div>
+    <p>The &ldquo;not an engineer&rdquo; framing undersells his edge. He is Savee&rsquo;s designer&#8209;founder, rebuilding an app he already understood deeply — the product spec and the taste were both already in his head.</p>
+    <p>And the 33 days, 1,078 prompts, and week&#8209;one release count are self&#8209;reported. The app being live is verifiable; the diary numbers are not.</p>
+  </div>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="brand">Prompt Advisers</div>
+  <div class="src">Sources: apps.apple.com/us/app/savee/id1375238218 &middot; x.com/and__dre (build thread) &middot; medium.com/@oamaral &middot; fetched 2026-07-21 &middot; free to share</div>
+</footer>
+
+</div>
+</body>
+</html>
